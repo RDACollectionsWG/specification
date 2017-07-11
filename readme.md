@@ -220,11 +220,6 @@ As an open platform, we want all data we produce to be easily shared and reused 
 |----:|----:|:----|
 | |Operation: |Calculate total size : int|
 
-|Trait: |Hierarchical| |
-|----:|----:|:----|
-| |Property (optional): |depth limit [int]|
-| |Operation: |Assemble powercollection : Virtual collection descriptor|
-
 |Trait: |Finite+Hierarchical| |
 |----:|----:|:----|
 | |Operation: |Calculate maximum depth : int|
