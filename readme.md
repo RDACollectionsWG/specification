@@ -51,7 +51,37 @@ There also some additional requirements still subject to discussion on whether o
  2. Collections should offer a listener/subscription model for collection change events.
  3. Some elements in a collection may not be named explicitly, but rather given implicitly through a generation rule.
 
-## 3. Requirements
+### 2.1 Implementation and Extensibility
+
+In addition to the functional requirements, we need to consider that implementation and extensibility requirements will vary across deployments.  The API for operating against a collection should be standard, but it must be possible for the way in which that API is implemented, and the scope of the operations supported, to be variable.  This variability is on levels: the functionality offered by the service, and the functionality implicit in a collection itself. In both cases, the variations must be explicitly expressed and machine-discoverable.
+
+#### 2.1.1 Service Features
+
+Implementations of the Collection Service may vary in the features they offer.  We have identified the following features which should be possible, but not required, of implementations:
+
+1. the ability to assign PIDs to new collections
+2. the ability to enforce access restrictions on collections
+3, the ability to support paginated requests
+4. the ability to support asynchronous actions
+5. the ability to automatically generate new collections from existing collections based upon pre-defined rules
+6. the ability to expand recursive collections (and limits of that expansion)
+7. the ability to provide support for collection versioning
+8. the ability to restrict or expand the supported set-based collection operations
+8. the ability to restrict or expand the supported collection model types
+
+#### 2.1.2 Collection Capabilities
+
+Further, the properties of any given collection may impact the actions that are possible for that collection.  We have identified the following collection capabilities which may impact how a producer or consumer operates on and with the collection and its contents:
+
+1. whether or not member items have an implicit ordering
+2. if ordered, where new items are inserted in that order
+3. whether member items can assume specific roles with respect to the collection (e.g. such as becoming a 'default' item)
+4. whether collection membership is static or mutable
+5. whether collection metadata is static or mutable
+6. whether member items are restricted to a specific data type
+7. whether a maximum number of a members items is imposed
+
+## 3. Definition
 A first coarse-grained collection definition is as follows<sup title="Adapted from http://smw-rda.esc.rzg.mpg.de/index.php/Collection">[1](http://smw-rda.esc.rzg.mpg.de/index.php/Collection)</sup>:
 > A collection is a digital object which bears a unique identifier and consists of a finite number of digital object identifiers and metadata associated with each referenced identifier.
 
