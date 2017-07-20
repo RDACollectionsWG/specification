@@ -5,12 +5,15 @@
 ## 1. Introduction
 Several communities have expressed interest in leveraging aggregations of objects with particular focus on building such aggregations through PIDs and possibly providing identifiers for aggregation objects.
 There is however no unified cross-community approach to building and managing such collections and no common model for understanding them.
+
 The PID Information Types WG has defined a core model and the central interface for accessing object state information and provided a small number of example types, which were consequently registered in the Type Registry WG prototype.
 With these tools available to describe essential object information, collections can be described so to be able to deal with more than a single object at once.
 
 Building collections within diverse domains and then sharing or expanding them across disciplines should enable common tools for end-users and e-infrastructure providers.
 Individual disciplinary communities can directly benefit if such tools are made widely available, and cross-community data sharing can benefit from increased unification between collection models and implementations.
 PID providers may benefit from marketing additional services on collections.
+
+A common abstract API  for data management of collections will facilitate data-interoperability and reuse by, (1) making solutions for managing collections more sustainable and widely available, thus (2) encouraging better data management practices and (3) allowing data objects in collections to be shared and re-used across projects and domains. It is not the intent of the working group to propose an alternative to existing well established standards for describing and archiving collections but rather to propose an API and implementation for creation, consumption, distribution and citation of collections and their items that could serve as a unifying layer _on top of_ the existing models and which can enable producers and consumers of collections to operate on data items managed in diverse collection models and repositories. Existing solutions focus on describing collections and their semantics with metadata, but do not offer a full set of generic, machine-actionable CRUD operations on them, which is a key innovation of the proposed API.
 
 ### 1.1 What is a collection?
 Imagine you have a number of objects that belong together.
@@ -53,7 +56,9 @@ There also some additional requirements still subject to discussion on whether o
 
 ### 2.1 Implementation and Extensibility
 
-In addition to the functional requirements, we need to consider that implementation and extensibility requirements will vary across deployments.  The API for operating against a collection should be standard, but it must be possible for the way in which that API is implemented, and the scope of the operations supported, to be variable.  This variability is on levels: the functionality offered by the service, and the functionality implicit in a collection itself. In both cases, the variations must be explicitly expressed and machine-discoverable.
+In addition to the functional requirements, we need to consider that implementation and extensibility requirements will vary across deployments.  The API for operating against a collection should be standard, but it must be possible for the way in which that API is implemented, and the scope of the operations supported, to be variable.  
+
+This variability is on levels: the functionality offered by the service, and the functionality implicit in a collection itself. In both cases, the variations must be explicitly expressed and machine-discoverable.
 
 #### 2.1.1 Service Features
 
@@ -71,7 +76,11 @@ Implementations of the Collection Service may vary in the features they offer.  
 
 #### 2.1.2 Collection Capabilities
 
-Further, the properties of any given collection may impact the actions that are possible for that collection.  We have identified the following collection capabilities which may impact how a producer or consumer operates on and with the collection and its contents:
+Collection capabilities are the properties of any given collection which may impact the actions that are possible for that collection. This metadata is essential to working with a collection and therefore must be easily accessible by an implementation.
+ 
+It should not be required, for example, for every implementation to build upon the PID Types API and the Data Types Registry. But in case these are supported, an example for such "allowed actions" would be that the collection only supports items who are of a specific data type X, as expressed by a type ID, or which, in addition, conform to a specific PIT profile (which requires a concrete minimal set of metadata to be included with the item).
+
+We have identified the following collection capabilities which may impact how a producer or consumer operates on and with the collection and its contents:
 
 1. whether or not member items have an implicit ordering
 2. if ordered, where new items are inserted in that order
@@ -231,64 +240,22 @@ As an open platform, we want all data we produce to be easily shared and reused 
 
 
 ## 6. Permission Management
-### 6.1 Authentication
-Authentication can be done by using an existing Single-Sign-On solution (Shibboleth, B2Access etc).
-As an alternative, an implementation can create its own user authentication.
 
-### 6.2 Authorization
-Authorization has to be done by an API implementation.
-An implementation should at a minimum offer the following roles and permissions.
-Implementations may choose to add more roles and permissions as required. 
-The following roles exist:
+We expect implementations of the Collections API to have differing requirements and solutions for enforcing access on collections and their member items. The API specification does not presume anything about the mechanism through which access control is enforced, but allows the implentation to declare whether whether or not it enforces access via a Service feature property.  
 
-1. "owner", indicating the users primarily responsible for a collection.
-2. "authenticated" represents every authenticated user
-3. "anonymous" represents unauthenticated users
+The OpenAPI specification <sup>(https://swagger.io/specification)</sup> we have used to document the API provides the means through which an implementation can specify a SecurityScheme <sup>(https://swagger.io/specification/#securitySchemeObject></sup> for individual API operations. This supports standard OAuth2 workflows, as well as basic authentication and api keys.  The Collection API also specifies use of the standard HTTP 401 response code for unauthorized requests on any operations wihch might be subject to access controls.
 
-Every collection can have multiple users for each of these roles, including the possibilities to have multiple owners for a collection.
-An anonymous user will automatically hold the anonymous role.
-There is no administrator role; administrator rights overriding all permissions may be implicitly given by the implementation aside from this authorization concept.
+In addition to service and operation level access controls, the API enables the declaration of whether an individual collection itself has access restrictions, and the license and ownership of the collection, via Collection level properties. 
 
-Every collection specifies three permissions for every role: "read", "write" and "modify permissions".
-These permissions only refer to collection operations, object operations are independent from them.
-For example, write permissions on a collection do not imply that the content of member objects can be changed.
-Each collection namespace has a default setting specifying default permissions for every role. A common default may be as follows:
+For information on how to implement authentication and authorization solutions, we recommend turning to Single Sign On standards such as OAuth2 <sup>(https://oauth.net/2/)</sup>, Shibboleth <sup>(https://shibboleth.net/)</sup> and SAML <sup>(https://en.wikipedia.org/wiki/SAML_2.0)</sup>. 
 
-|     | Read | Write | Change permission |
-|-----|:----:|:-----:|:-----------------:|
-|Owner| :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-|Authenticated| :heavy_check_mark: |  |  |
-|Anonymous|  |       |                   |
 
-A common variant may be to also provide anonymous users with read access by default.
-
-Additional comments:
-
-  When a new collection is created, the requesting user is set up within its owner role.
-  The owner role's permissions are set to the namespace default.
-
-  **Authorization is always set on the level of a single collection, it is not automatically recursive.
-  Every collection has individual permissions.**
-  An implementation may choose, upon collection creation, to create subcollections with their super collection's permissions, thereby overriding the namespace defaults.
-  This should only happen once on creation and not upon permission changes afterwards.
-  In addition, an implementation may offer a flag that activates such a mechanism for any individual collection, with the flag also being copied upon collection creation.
-
-  Ownership transfer is possible by adding more users with the owner role and removing others from it.
-  An implementation should refuse a permission change request that removes the last user from the owner role.
-
-## 7. Capabilities
-Collection capabilities specify the actions that are possible for a specific collection and thereby also tell a user which actions are impossible in the particular case.
-These metadata are essential to work with a collection and therefore must be easily accessible by an implementation.
-
-It should not be required for every implementation to build upon the PID Types API and the DTR.
-But in case these are supported, an example for such “allowed actions” would be that the collection only supports items who are of a specific data type X, as expressed by a type ID, or which, in addition, conform to a specific PIT profile (which requires a concrete minimal set of metadata to be included with the item).
-
-## 8. API
+## 7. API
 
 [http://rdacollectionswg.github.io/apidocs/#/](http://rdacollectionswg.github.io/apidocs/#/)
 
 The API should enable advanced functionality (e.g. search), to be built by consumers of it, but not all such functionality is in scope for the API itself.
 
-## 9. Implementation
+## 8. Implementation
 
-## 10. Conclusion
+## 9. Conclusion
