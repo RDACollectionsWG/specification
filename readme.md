@@ -56,7 +56,9 @@ There also some additional requirements still subject to discussion on whether o
 
 ### 2.1 Implementation and Extensibility
 
-In addition to the functional requirements, we need to consider that implementation and extensibility requirements will vary across deployments.  The API for operating against a collection should be standard, but it must be possible for the way in which that API is implemented, and the scope of the operations supported, to be variable.  This variability is on levels: the functionality offered by the service, and the functionality implicit in a collection itself. In both cases, the variations must be explicitly expressed and machine-discoverable.
+In addition to the functional requirements, we need to consider that implementation and extensibility requirements will vary across deployments.  The API for operating against a collection should be standard, but it must be possible for the way in which that API is implemented, and the scope of the operations supported, to be variable.  
+
+This variability is on levels: the functionality offered by the service, and the functionality implicit in a collection itself. In both cases, the variations must be explicitly expressed and machine-discoverable.
 
 #### 2.1.1 Service Features
 
@@ -74,7 +76,11 @@ Implementations of the Collection Service may vary in the features they offer.  
 
 #### 2.1.2 Collection Capabilities
 
-Further, the properties of any given collection may impact the actions that are possible for that collection.  We have identified the following collection capabilities which may impact how a producer or consumer operates on and with the collection and its contents:
+Collection capabilities are the properties of any given collection which may impact the actions that are possible for that collection. This metadata is essential to working with a collection and therefore must be easily accessible by an implementation.
+ 
+It should not be required, for example, for every implementation to build upon the PID Types API and the Data Types Registry. But in case these are supported, an example for such "allowed actions" would be that the collection only supports items who are of a specific data type X, as expressed by a type ID, or which, in addition, conform to a specific PIT profile (which requires a concrete minimal set of metadata to be included with the item).
+
+We have identified the following collection capabilities which may impact how a producer or consumer operates on and with the collection and its contents:
 
 1. whether or not member items have an implicit ordering
 2. if ordered, where new items are inserted in that order
@@ -243,19 +249,13 @@ In addition to service and operation level access controls, the API enables the 
 
 For information on how to implement authentication and authorization solutions, we recommend turning to Single Sign On standards such as OAuth2 <sup>(https://oauth.net/2/)</sup>, Shibboleth <sup>(https://shibboleth.net/)</sup> and SAML <sup>(https://en.wikipedia.org/wiki/SAML_2.0)</sup>. 
 
-## 7. Capabilities
-Collection capabilities specify the actions that are possible for a specific collection and thereby also tell a user which actions are impossible in the particular case.
-These metadata are essential to work with a collection and therefore must be easily accessible by an implementation.
 
-It should not be required for every implementation to build upon the PID Types API and the DTR.
-But in case these are supported, an example for such “allowed actions” would be that the collection only supports items who are of a specific data type X, as expressed by a type ID, or which, in addition, conform to a specific PIT profile (which requires a concrete minimal set of metadata to be included with the item).
-
-## 8. API
+## 7. API
 
 [http://rdacollectionswg.github.io/apidocs/#/](http://rdacollectionswg.github.io/apidocs/#/)
 
 The API should enable advanced functionality (e.g. search), to be built by consumers of it, but not all such functionality is in scope for the API itself.
 
-## 9. Implementation
+## 8. Implementation
 
-## 10. Conclusion
+## 9. Conclusion
