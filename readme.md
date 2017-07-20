@@ -105,29 +105,31 @@ A collection’s elements may be arranged in a particular form, including unorde
 Ordered form may be useful to describe inherent semantics of a collection, for instance, to arrange subsequent versions of a digital object in order or capture a strict order of slices of a time series.
 
 ### 3.1 Fine grained collection definition
-We define the following elements within the scope of what we consider collections:
 
-A **collection** is a 2-tuple of an identifier and the collection state.
+We define the following elements within the scope of what we consider collections, with a direct connection to how the Collection API is structured:
 
-The **collection state** is a 3-tuple of collection membership, collection capabilities and collection metadata.
+A **collection** is a 4-tuple of an identifier, capabilities, collection properties, and membership. 
 
-The **collection membership** is a finite set of collection item identifiers.
+**Collection Capabilities** fully comprise the set of actions that are supported by it. Actions may affect collection properties or membership. *Remark*: (1) An external agent may provide more actions than are in a collection's capabilities, e.g. more sophisticated composite actions or actions across multiple collections.  (2) An agent submits a capability request to a collection to retrieve the action set.
 
-A **collection item identifier** points either to a collection or to some digital object, called a collection leaf, which is not a collection.
+**Collection properties** comprise essential metadata regarding the collection, who have a primarily informative purpose, whereas collection capabilities determine the possible actions on a collection.
+ * *Examples:* General collection state information such as its creation date, ownership and license, possible relations to other collections, like parent collections, or a pointer to a more sophisticated description ontology.
 
-The **collection metadata** consists of the collection description and of procedural (or functional or technical) metadata, that are machine interpretable and used for automated processes on collections. Procedural (or functional/technical) metadata consist of collection properties, the Mapping Function and all item metadata.
+The **collection membership** is a finite multiset of collection members. Collection membership may either be defined explicitly or implicitly through a generation rule. 
 
-**Collection properties** contain metadata of the collection structure itself.
- * *Examples:* the collection state like its size or whether it is an ordered list or an unordered set, whether it is mutable or fixed. Also possible relations to other collections, like parent collections, or properties common to all its collection items like mutability or the belonging to one repository.
+A **collection member entry** consists of a member identifier and multiple member properties, which are further subdivided into general properties (the member's location, description, data type and ontology) as well as multiple **mapping properties**, which are member metadata only valid in the context of the particular collection such as member role, index, and timestamps for when the member was added or updated within the collection. Note that a collection can become a member of another collection by adding it to it, referencing the subcollection's identifier. If the collection member is not a collection itself, we call it a **collection leaf**.
 
-**Collection Capabilities** fully comprises the set of actions that are supported by it. Actions may or may not affect collection state.  *Remark*: (1) An external agent may provide more actions than are in a collection's capabilities, e.g. more sophisticated composite actions or actions across multiple collections.  (2) An agent submits a capability request to a collection to retrieve the action set.
+The following figure illustrates the overall structure of these various elements.
 
-The **Mapping Function** is a function F mapping from the collection membership to item metadata elements.
+![Collection definitions hierarchy](collection-definitions-hierarchy.png)
 
- - The function F need not be injective: Multiple items can be related to the same metadata. 
- - *Examples:* the mime types of the items, can be given as list or as the mapping of each item to its mime type. 
+As membership is a multiset, multiple membership of identical items is possible, which can be of practical relevance in ordered collections, for instance. The notion of *mapping* properties originates in the idea that there is an inherent mapping function that points from membership to mapping metadata elements. This function is injective, as multiple items can be related to the same metadata.
 
-The **Collection Description** is all the metadata that are not procedural. Its main purpose is to describe to the domain expert using the collections what its usefulness is.
+In addition to the definitions listed above that comprise the structure that is also reflected in the API, we can also take a conceptual viewpoint focused on what comprises the collection's dynamic state and internal mapping relations. This results in an alternative approach to structuring, which may help to understand the concept and is captured in the following two brief definitions:
+
+We first define the **collection state** as the 3-tuple of collection membership, collection capabilities and collection metadata.
+
+The **collection metadata** comprises the collection properties, all member mapping metadata and the mapping function.
 
 ## 4. Use Cases
 
