@@ -234,50 +234,14 @@ As an open platform, we want all data we produce to be easily shared and reused 
 
 
 ## 6. Permission Management
-### 6.1 Authentication
-Authentication can be done by using an existing Single-Sign-On solution (Shibboleth, B2Access etc).
-As an alternative, an implementation can create its own user authentication.
 
-### 6.2 Authorization
-Authorization has to be done by an API implementation.
-An implementation should at a minimum offer the following roles and permissions.
-Implementations may choose to add more roles and permissions as required. 
-The following roles exist:
+We expect implementations of the Collections API to have differing requirements and solutions for enforcing access on collections and their member items. The API specification does not presume anything about the mechanism through which access control is enforced, but allows the implentation to declare whether whether or not it enforces access via a Service feature property.  
 
-1. "owner", indicating the users primarily responsible for a collection.
-2. "authenticated" represents every authenticated user
-3. "anonymous" represents unauthenticated users
+The OpenAPI specification <sup>(https://swagger.io/specification)</sup> we have used to document the API provides the means through which an implementation can specify a SecurityScheme <sup>(https://swagger.io/specification/#securitySchemeObject></sup> for individual API operations. This supports standard OAuth2 workflows, as well as basic authentication and api keys.  The Collection API also specifies use of the standard HTTP 401 response code for unauthorized requests on any operations wihch might be subject to access controls.
 
-Every collection can have multiple users for each of these roles, including the possibilities to have multiple owners for a collection.
-An anonymous user will automatically hold the anonymous role.
-There is no administrator role; administrator rights overriding all permissions may be implicitly given by the implementation aside from this authorization concept.
+In addition to service and operation level access controls, the API enables the declaration of whether an individual collection itself has access restrictions, and the license and ownership of the collection, via Collection level properties. 
 
-Every collection specifies three permissions for every role: "read", "write" and "modify permissions".
-These permissions only refer to collection operations, object operations are independent from them.
-For example, write permissions on a collection do not imply that the content of member objects can be changed.
-Each collection namespace has a default setting specifying default permissions for every role. A common default may be as follows:
-
-|     | Read | Write | Change permission |
-|-----|:----:|:-----:|:-----------------:|
-|Owner| :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-|Authenticated| :heavy_check_mark: |  |  |
-|Anonymous|  |       |                   |
-
-A common variant may be to also provide anonymous users with read access by default.
-
-Additional comments:
-
-  When a new collection is created, the requesting user is set up within its owner role.
-  The owner role's permissions are set to the namespace default.
-
-  **Authorization is always set on the level of a single collection, it is not automatically recursive.
-  Every collection has individual permissions.**
-  An implementation may choose, upon collection creation, to create subcollections with their super collection's permissions, thereby overriding the namespace defaults.
-  This should only happen once on creation and not upon permission changes afterwards.
-  In addition, an implementation may offer a flag that activates such a mechanism for any individual collection, with the flag also being copied upon collection creation.
-
-  Ownership transfer is possible by adding more users with the owner role and removing others from it.
-  An implementation should refuse a permission change request that removes the last user from the owner role.
+For information on how to implement authentication and authorization solutions, we recommend turning to Single Sign On standards such as OAuth2 <sup>(https://oauth.net/2/)</sup>, Shibboleth <sup>(https://shibboleth.net/)</sup> and SAML <sup>(https://en.wikipedia.org/wiki/SAML_2.0)</sup>. 
 
 ## 7. Capabilities
 Collection capabilities specify the actions that are possible for a specific collection and thereby also tell a user which actions are impossible in the particular case.
