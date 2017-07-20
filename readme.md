@@ -258,4 +258,15 @@ The API should enable advanced functionality (e.g. search), to be built by consu
 
 ## 8. Implementation
 
-## 9. Conclusion
+## 9. Adoption Efforts
+
+### 9.1 RPID Test Bed
+
+### Perseids Project
+
+### GEOFON Project
+
+### Fedora
+
+
+## 10. Conclusion
