@@ -188,64 +188,24 @@ As an open platform, we want all data we produce to be easily shared and reused 
 * perform more complex discovery operations on collections based upon the properties of individual collection items, such finding all items across all collections that match or don't match or contain a specific item. 
 
 
-## 5. Models
+## 5. Additional collection operations
 
-| Trait: | * | |
-|----:|----:|:----|
-| | Property (optional): | duplicates allowed [bool] |
-| |Operation: | Get iterator : iterator<PID>
-| | Operation: | Contains (PID) : bool |
-| | Operation: | Assemble clone action : action |
-| | Operation: | Search (… criteria …) : list of PIDs |
-| | Operation: | Create view (… criteria …) : View identifier |
-| | Operation: | Retrieve view (View identifier) : list of PIDs |
+As explained until now, the conceptual model for collections and the Collection API specification are flexible enough to support a variety of usage scenarios. The specification expresses this flexibility through collection capabilities, properties and methods, which can be used quite freely. While the API specification aims to provide the most common operations on collections, some of the possible operations are only valid for specific *collection models*. A collection model is understood as a specific configuration of a collection through its capabilities or properties that restricts usage beyond these. An alternative interpretation that was also discussed within the group was that of traits related to trait-based programming, where the main point would be that such traits are not defined orthogonally to each other and that the combination of traits is a key aspect.
 
-|Trait: |Extendable| |
-|----:|----:|:----|
-| |Property (mandatory): |read-only [bool=False]|
-| |Property (optional): |Exclusive membership policy [bool]|
-| |Operation: |Add item (PID)|
+By introducing these extended limits, additional operations become possible. These operations are listed in the descriptions below, but they are not included in the API specification as they exceed its scope, but instead should be understood as suggestions to implementors for further extensions. 
 
-|Trait: |Ordered| |
-|----:|----:|:----|
-| |Property (mandatory): |ordered [bool=True]|
-| |Operation: |Get item (index) : PID|
-| |Operation: |Get slice (start index, end index) : list of PIDs|
+The following are some examples for collection models:
+1. Ordered collection: If a collection is ordered, a *getSlice* operation can be introduced, with start and end index parameters. For a collection with modifiable membership, a *replace* method with indexes may be useful.
+2. Finite collection: If a collection has a maxLength set in its properties, a *calculateTotalSize* operation becomes feasible.
+3. Finite and hierarchical collection: If a collection is finite and has member collection items, operations such as *calculateMaximumDepth* and *calculateNumberOfDirectChildren* are possible.
 
-|Trait: |Insertions allowed| (extends Extendable+Ordered)|
-|----:|----:|:----|
-| |Property (mandatory): |middle inserts [bool=True]|
-| |Operation: |Insert item before (PID, index)|
-| |Operation: |Insert item after (PID, index)|
-
-|Trait: |Shrinkable| |
-|----:|----:|:----|
-| |Property (optional): |no deletes [bool=True]|
-| |Operation: |Remove item (PID) : bool|
-
-|Trait: |Shrinkable+Ordered| |
-|----:|----:|:----|
-| |Operation: |Remove via index (index)|
-
-|Trait: |Finite| |
-|----:|----:|:----|
-| |Operation: |Calculate total size : int|
-
-|Trait: |Finite+Hierarchical| |
-|----:|----:|:----|
-| |Operation: |Calculate maximum depth : int|
-| |Operation: |Calculate number of direct children : int|
-
-|Trait: |Rule-based| |
-|----:|----:|:----|
-| |Property (mandatory): |rule based [bool=True]|
-
+This list is notedly not considered exhaustive; depending on specific usage scenario or special cases, e.g. within specific disciplines or running infrastructure and services, further models may be useful with even more detailed special operations. The main reason for not including them in the API specification was that the additional value they provide was judged to be too much limited to specific user groups so that including them as base functionality would make the generic API too heavy. This, of course, does not preclude going down such a route in future revisions once usage scenarios widely demand particular model behavior.  
 
 ## 6. Permission Management
 
-We expect implementations of the Collections API to have differing requirements and solutions for enforcing access on collections and their member items. The API specification does not presume anything about the mechanism through which access control is enforced, but allows the implentation to declare whether whether or not it enforces access via a Service feature property.  
+We expect implementations of the Collections API to have differing requirements and solutions for enforcing access on collections and their member items. The API specification does not presume anything about the mechanism through which access control is enforced, but allows the implementation to declare whether whether or not it enforces access via a Service feature property.  
 
-The OpenAPI specification <sup>(https://swagger.io/specification)</sup> we have used to document the API provides the means through which an implementation can specify a SecurityScheme <sup>(https://swagger.io/specification/#securitySchemeObject></sup> for individual API operations. This supports standard OAuth2 workflows, as well as basic authentication and api keys.  The Collection API also specifies use of the standard HTTP 401 response code for unauthorized requests on any operations wihch might be subject to access controls.
+The OpenAPI specification <sup>(https://swagger.io/specification)</sup> we have used to document the API provides the means through which an implementation can specify a SecurityScheme <sup>(https://swagger.io/specification/#securitySchemeObject></sup> for individual API operations. This supports standard OAuth2 workflows, as well as basic authentication and API keys.  The Collection API also specifies use of the standard HTTP 401 response code for unauthorized requests on any operations which might be subject to access controls.
 
 In addition to service and operation level access controls, the API enables the declaration of whether an individual collection itself has access restrictions, and the license and ownership of the collection, via Collection level properties. 
 
