@@ -33,26 +33,27 @@ Nonetheless, we want to do the same things with our bag of objects: Put objects 
 We may even have some constraints on the collection, such as whether its objects are ordered or unordered, or whether there are further hierarchies inside it.
 
 ## 2. Requirements
-A survey done prior to establishment of the Collection WG resulted in a discussion that spun out the following core requirements that should apply to collections across disciplines:
+
+While there are manifold usage scenarios for collections, several fundamental requirements exist to which the API specification with its CRUD operations also adheres to. The following list of requirements therefore applies to collections across implementations and disciplines. These requirements were assembled from a survey done prior to establishment of the WG and ongoing discussions throughout its lifetime.
 
  1. Collections must bear globally registered persistent identifiers (PIDs).
  2. Objects in a collection must bear unique identifiers. These can be PIDs, but also identifiers unique within a specific system’s context as long as they remain valid references throughout changes in object location within the system.
  3. Minimal state information on objects must remain retrievable using the identifier beyond the object’s lifetime.
- 4. No assumption should be made on the lifetime of collections. Collections may be deleted at any time or kept over long timespans, depending on use case.
+ 4. No assumption should be made on the lifetime of collections. Collections may be deleted at any time or kept over long time spans, depending on use case.
  5. Collections may contain sub-collections, but not recursively. It should be possible to restrict this rule for individual collections.
  6. Objects may belong to more than one collection.
  7. A single collection may contain objects stored at different places.
  8. Collections are finite.
- 9. Any object in a collection may be referred to by multiple identifiers within the collection.
+ 9. Any object that bears multiple identifiers may also be referred to by multiple identifiers within a single collection.
  10. Collections must offer well-defined actions (such as create, read, update, delete) that can be executed by software agents with minimal additional context required.
- 11. A software agent should be enabled to determine the specific usage (“collection model”) of a collection by querying a specific collection action. There should be no need for a caller to know the model in advance, except in the case of collection creation.
+ 11. A software agent should be enabled to determine usage or behavioural restrictions (“capabilities”) of a collection by querying a specific collection action. There should be no need for a caller to know the underlying model in advance, except in the case of collection creation.
  12. It should be possible to record the role of an object within a specific collection, independent from the role it has in the context of other collections.
 
-There also some additional requirements still subject to discussion on whether or to what extent they should be mandatory.
+There also some additional requirements that were discussed but did not reach consensus to become mandatory:
 
- 1. Objects in collections should have registered data types.
- 2. Collections should offer a listener/subscription model for collection change events.
- 3. Some elements in a collection may not be named explicitly, but rather given implicitly through a generation rule.
+ 1. Objects in collections should have registered data types. The specification supports a field to store data types, but does not make them mandatory or require a specific format. It is recommended, however, to align with the RDA recommendation on Data Type Registries.
+ 2. Collections should offer a listener/subscription model for collection change events. This was discussed and deemed quite valuable for advanced use cases, but introduces a level of complexity that was considered out of scope for the general specification. 
+ 3. Some elements in a collection may not be named explicitly, but rather given implicitly through a generation rule. Such *rule-based collections* were discussed and considered interesting as they offer a significantly different approach to collection management, more akin to dynamic database views. A rule-based collection could, for example, contain all objects that are of a specific data type, and thus extend by definition also to future objects of such type. However, the actual implementation of such a collection service is more complex than for descriptive collections, and it remained unclear how the rules and resulting mechanisms would be specified in an API and conceptually described in a solid way.
 
 ### 2.1 Implementation and Extensibility
 
@@ -196,10 +197,12 @@ By introducing these extended limits, additional operations become possible. The
 
 The following are some examples for collection models:
 1. Ordered collection: If a collection is ordered, a *getSlice* operation can be introduced, with start and end index parameters. For a collection with modifiable membership, a *replace* method with indexes may be useful.
-2. Finite collection: If a collection has a maxLength set in its properties, a *calculateTotalSize* operation becomes feasible.
-3. Finite and hierarchical collection: If a collection is finite and has member collection items, operations such as *calculateMaximumDepth* and *calculateNumberOfDirectChildren* are possible.
+2. Limited size collection: If a collection has a maxLength set in its properties, a *calculateTotalSize* operation becomes feasible. Note that such an operation could always be offered, even if maxLength is not set, but might be expensive. 
+3. Hierarchical collection: If a collection is finite and has member collection items, operations such as *calculateMaximumDepth* and *calculateNumberOfDirectChildren* are possible.
 
-This list is notedly not considered exhaustive; depending on specific usage scenario or special cases, e.g. within specific disciplines or running infrastructure and services, further models may be useful with even more detailed special operations. The main reason for not including them in the API specification was that the additional value they provide was judged to be too much limited to specific user groups so that including them as base functionality would make the generic API too heavy. This, of course, does not preclude going down such a route in future revisions once usage scenarios widely demand particular model behavior.  
+This list is notedly not considered exhaustive; depending on specific usage scenario or special cases, e.g. within specific disciplines or running infrastructure and services, further models may be useful with even more detailed special operations. The main reason for not including them in the API specification was that the additional value they provide was judged to be too much limited to specific user groups so that including them as base functionality would make the generic API too heavy. This, of course, does not preclude going down such a route in future revisions once usage scenarios widely demand particular model behavior. 
+
+One further operation of potentially high interest is in case of hierarchical collections a *getParent/getParents* operation. The feasibility of such an operation depends on whether hierarchical parent collections are actually recorded within the properties of child collections, which requires the actor who adds a collection as member to another collection to be able and allowed to modify the parent collection's properties. There are multiple potential issues with such an approach, including security and scalability, which is why it was not considered eligible for the general API specification.
 
 ## 6. Permission Management
 
