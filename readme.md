@@ -220,7 +220,7 @@ The API should enable advanced functionality (e.g. search), to be built by consu
 
 ### 9.1 RPID Test Bed
 
-The Perseids Manifold implementation <sup>(https://github.com/RDACollectionsWG/perseids-manifold)</sup> of the Collections API is included in the RPID Test Bed <sup>(https://rpidproject.github.io/rpid)</sup>. The RPID testbed is intended to stimulate and enable evaluation of the complementary outputs of the Research Data Alliance (RDA) in PID oriented data management. The testbed includes a Handle Service, a Data Type Registry, a PIT API, and a Collections API and is available for research, education, non-profit, or pre-competitive use through 2019.
+The Perseids Manifold implementation <sup>(https://github.com/RDACollectionsWG/perseids-manifold)</sup> of the Collections API is included in the RPID Test Bed <sup>(https://rpidproject.github.io/rpid)</sup>. The RPID testbed is intended to stimulate and enable evaluation of the complementary outputs of RDA in PID oriented data management. The testbed includes a Handle Service, a Data Type Registry, a PIT API, along with the Collections API, and is available for research, education, non-profit, or pre-competitive use through 2019.
 
 ### Perseids Project
 
