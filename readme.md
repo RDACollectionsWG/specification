@@ -224,6 +224,13 @@ The Perseids Manifold implementation <sup>(https://github.com/RDACollectionsWG/p
 
 ### Perseids Project
 
+The Perseids Project currently uses the Perseids Manifold implementation of the Collections API to manage its collections of annotations.  When an annotation data object is created on Perseids, it gets added to: (1) the collection of all annotations created by the that user; (2) a collection representing the specific publication to which the annotation data object belongs; and (3) if the annotation identifies a canoncial text source via a CTS URN <sup>(http://cite-architecture.github.io/ctsurn/overview/)</sup> as its primary topic of interest, the data object gets added to one or more collections of annotations about that topic depending upon the granularity of the CTS URN identifier. 
+
+Future enhancements would be to extend the use of the Collections API through the entire lifecycle of the publication, as set forth below:
+
+![Perseids Data Collection Lifecyle](perseidsdatacollectionlifecycle.png)
+
+
 ### GEOFON Project
 
 ### Fedora
