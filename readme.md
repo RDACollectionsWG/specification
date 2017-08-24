@@ -315,7 +315,7 @@ For the membership therefore one could think of a solution by a reference to a d
 There exists already an implementation as a very early prototype based on flask for such a generic  collection registry allowing internal or external membership data. 
 
 #### 12.1.4 References
-[1] Schwardmann, U.: Automated schema extraction for PID information types, IEEE International Conference on Big Data,  5-8 Dec. 2016, IEEE, DOI:10.1109/BigData.2016.7840957.
+[1] Schwardmann, U.: Automated schema extraction for PID information types, IEEE International Conference on Big Data,  5-8 Dec. 2016, IEEE, DOI: http://hdl.handle.net/10.1109/BigData.2016.7840957.
 
 #### 12.1.5 Overview on Currently Registered Types
 
