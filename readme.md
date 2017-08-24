@@ -225,7 +225,11 @@ This list is notedly not considered exhaustive; depending on specific usage scen
 
 One further operation of potentially high interest is in case of hierarchical collections a *getParent/getParents* operation. The feasibility of such an operation depends on whether hierarchical parent collections are actually recorded within the properties of child collections, which requires the actor who adds a collection as member to another collection to be able and allowed to modify the parent collection's properties. There are multiple potential issues with such an approach, including security and scalability, which is why it was not considered eligible for the general API specification.
 
-## 6. Permission Management
+## 6. Data Types and Data Type Registration of Collection Elements
+
+All collection elements and its components need to be defined in a transparent way. Because a mayor goal is an automated way of processing collections, these definitions have to be transparent also for machines, which implies machine actionable registries for such definitions. RDA has suggested so called data type registries (DTRs) for this kind of purpose and a definition of a collection element therefore would here become a data type referenced by a persistent identifier and described in a DTR. A typical data type in such a registry has beside its PID a name, a description, applicable standards, some provenance information and can express named dependencies from other types. A more concise decription of the data type registration of collection elements can be found in the Appendix.
+
+## 7. Permission Management
 
 We expect implementations of the Collections API to have differing requirements and solutions for enforcing access on collections and their member items. The API specification does not presume anything about the mechanism through which access control is enforced, but allows the implementation to declare whether whether or not it enforces access via a Service feature property.  
 
@@ -236,17 +240,17 @@ In addition to service and operation level access controls, the API enables the 
 For information on how to implement authentication and authorization solutions, we recommend turning to Single Sign On standards such as OAuth2 <sup>(https://oauth.net/2/)</sup>, Shibboleth <sup>(https://shibboleth.net/)</sup> and SAML <sup>(https://en.wikipedia.org/wiki/SAML_2.0)</sup>. 
 
 
-## 7. API
+## 8. API
 
 [http://rdacollectionswg.github.io/apidocs/#/](http://rdacollectionswg.github.io/apidocs/#/)
 
 The API should enable advanced functionality (e.g. search), to be built by consumers of it, but not all such functionality is in scope for the API itself.
 
-## 8. Implementation
+## 9. Implementation
 
-## 9. Adoption Efforts
+## 10. Adoption Efforts
 
-### 9.1 RPID Test Bed
+### 10.1 RPID Test Bed
 
 The Perseids Manifold implementation <sup>(https://github.com/RDACollectionsWG/perseids-manifold)</sup> of the Collections API is included in the RPID Test Bed <sup>(https://rpidproject.github.io/rpid)</sup>. The RPID testbed is intended to stimulate and enable evaluation of the complementary outputs of RDA in PID oriented data management. The testbed includes a Handle Service, a Data Type Registry, a PIT API, along with the Collections API, and is available for research, education, non-profit, or pre-competitive use through 2019.
 
@@ -265,6 +269,146 @@ Future enhancements would be to extend the use of the Collections API through th
 
 The working group chairs initiated discussions with the Fedora Repository (http://fedorarepository.org/) development team to explore the feasibility of adding support for the Collections API to Fedora.  We believe that in order to achieve our goals of enabling widespread data sharing, RDA outputs like the Collections API must be implemented by the infrastructures researchers are already using for managing their data and collections.  Repositories like Fedora are an obvious candidate for this. The the work the API-X community (https://wiki.duraspace.org/display/FF/Design+-+API+Extension+Architecture) has done to implement an API Framework for adding services to Fedora should provide the hooks needed to fairly easily implement the RDA Collections API as an added-value service. Further, the Perseids Manifold implementation has already confirmed that it is possible to use the API to manage collections of data which are expressed according to the Linked Data Protocol model used by Fedora. We have issued a call to both the RDA Collections Working Group and the Fedora Community development community to identify stakeholders for this effort <sup>(https://groups.google.com/forum/#!topic/fedora-community/FFFGrjq54x0)</sup>.
 
-## 10. Conclusion and Outlook
+## 11. Conclusion and Outlook
 
 The general concept of collections and the facilities the common API provides can also be a point for interfacing and integration with Linked Data and ontology usage in general. In line with considerations by the RDA Data Fabric IG, the foundation for research data management is seen at the level of digital objects, with enabling technologies such as persistent identifiers and type registries. Collections provide a layer on top of these, and they express some essential relations between individual objects. The Collection API also offers some anchor points to extent this notion of inter-object relations further. These relations should be integrated into a further Linked Data layer, and certainly enriched with more relations that go beyond the collection scope to provide an encompassing, seamless metadata view. An underpinning of formally encoded ontologies can then provide the semantic dimension needed for agents to make autonomous decisions based on both Collection API actions and Linked Data.  
+
+## 12. Appendix
+
+## 12.1 Data Type Registration of Collection Elements
+
+## 12.1.1 Hierarchical Data Types, Semantics and Disambiguation
+
+The description of dependencies alone, as it was foreseen in the Outcome of the Data Type Registry Working Group of RDA, does not allow a distinction of the way, how dependent types are related to the parent type and to each other for these typical data types as they are described for DTRs in the RDA outcome of the DTR working group. In order to exactly describe types dependent from other types, like those necessary for collections, one needs to implement more structure into the DTR. Data types with this kind of additional information are called hierarchical data types. A special implementation of such hierarchical data types in the ePIC DTR, that refers to JSON schema for the specification of data structure, is described in more detail in [1]. As one additional feature for hierarchical data types one obviously needs some kind of end points without any further reference. These are called basic types in the context of the ePIC DTR (http://dtr.pidconsortium.eu). 
+
+As a side remark: if one equips these basic types with syntactic requirements (schemas), the specification of the dependency structure allows to provide schemas also for the dependent types.
+
+An important feature of the description of dependent types is that one can assign special names to them in the context of the parent data type (named dependencies). Here a data type with a given name and description can became a completely different semantic in the context of the parent dependent of this type, e.g. a unicode string can become a description or a license agreement or author name.
+
+In the context of hierarchical data types this naming becomes even more important, because the names refer inside the DTR to the PIDs of their data types, and because, with some structure, they are hierarchically relying eventually on basic types, these names are, by the dependencies inside a data type, completely defined structures. This has the advantage that for a data type, given by its PID, one can use these possibly ambiguous internal names as references, because they are disambigued by their type PID and their internal dependency structure.
+
+As a consequence for a given hierachical data type the use of human understandable names for substructures still leads to a well defined total structure and this total structure is completely transparent for machine actions by the type PIDs given in the data type as corresponding to these human understandable names. In other words for hierachical data types it is sufficient to refer to the overall data type PID in order to maintain human readable structures. 
+
+Which data type is choosen as the referred overall data type, is in general a context dependent granularity decision, as one can see for example in the collection use case as described below.
+
+## 12.1.2 Collection Member Type Description
+
+There exists a data type definition called Collection2 that references the five elements identifier, description, properties, capabilities and membership at the ePIC DTR. In order to get a complete type definition for this Collection type, a type definition for each of its five dependencies, their dependencies and dependencies of dependencies ending with basic types as boolean, integer or string is provided. A complete list of the currently defined types in the collection context is given in the subsection about currently registered types below. The current definition of membership in the DTR is compatible, but in fact a bit more complicated, to ensure also the collection registry implementation in a Handle Server, as described in the following subsection.
+
+In the context of collections the decision about the overall data type reference can give different different granularities. Which data type granularity is used, is essentially a question of what metadata about a collection is stored in which way in a collection registry. One possibility would be to reference to a type named Collection (s.a.) as a data type consisting of the types given for the five names above. Another is to use the five elements identifier, description, properties, capabilities and membership individually as data type references.  Even another could distinguish between the collection content, the membership, from the collection metadata, the identifier, description, properties and capabilities, and uses these two as data type references.
+
+As an additional data type one always needs the ServiceFeature, which gives information about the collection registry in its whole.
+
+Other granularities as above are also possible, but they lead in general to less transparency for humans, because the PID references need to be more and more explicit. On the other hand human readability can be achieved by using the machine readable information in the DTR to automatically transform outputs into the named structure by content negotiation. But this requires additional implementation overhead.
+
+## 12.1.3 A Generic Collection Registry Implementation based on Type Values stored in the Collection PID
+
+Because the Handle System as PID provider allows the storage of additional data type values to a given Handle PID, it is an obvious possibility to implement a collection registry on top of a Handle Service by creating for each new collection a PID and store all of the above described collection elements as types inside this PID.
+
+Such an approach has a couple of advantages. One needs to get a PID for a collection anyway and the Handle record allows the storage of type values and this is provided by an API, therefore all one needs is at one place. If one prepends the pathes as provided by RDA for the collection API with the prefix of a Handle Service, one gets a generic collection registry implementation, that can be used across different communities and user groups. The only requirement for a user group would be, to have access to a Handle Service. Such a generic implementation also ensures, that the collection data is always based on the data types as already defined in a DTR. And if one has also schemas available at the data type, as with automated schema generation of the ePIC DTR, one is able to control the data provided for creation and modification of the collection and refuse the operation with a qualified error message.  
+
+The necessity to distinguish between the collection registry authorization and Handle Server authorization vanishes. This can be both an advantage or a disadvantage and depends on the  authorization policies in question.
+
+A disadvantage is the possible overload of the Handle Server. The collection metadata fields are rather restricted in size, and also they should not change too often, because they refer to the whole collection and not to changements in its members. But especially if the membership is huge or changes too often, this traffic can obstruct the Handle Server. 
+
+For the membership therefore one could think of a solution by a reference to a digital object in an external repository, which containes then the membership data. This can be determined even at the individual collection level: whether the membership data of a collection is internal or external can be easily distinguished: if it is an array of member items, it would be internal, if it is an identifier string, it would be external. A membership with only one member item is also a list consisting of this only member item. The creation and changement of external membership data needs additional access to that repository of course.
+There exists already an implementation as a very early prototype based on flask for such a generic  collection registry allowing internal or external membership data. 
+
+## 12.1.4 References
+[1] Schwardmann, U.: Automated schema extraction for PID information types, IEEE International Conference on Big Data,  5-8 Dec. 2016, IEEE, DOI:10.1109/BigData.2016.7840957.
+
+## 12.1.5 Overview on Currently Registered Types
+
+"Collection" : {                      # dictionary
+  "id"                                : "21.T11148/2037de437c80264ccbce"
+  "content":
+  {
+   "id"                               : "21.T11148/0dd75e3528dd246977ec",
+   "membership"                       : "21.T11148/ec9db37ca4b137579592",
+   "description"                      : "21.T11148/d6532ef6dc2b2a4ea01e",
+   "capabilities"                     : "21.T11148/362d2035d5045b3885b6",
+   "properties"                       : "21.T11148/e200c0c8256011f46a25"                                                                                              
+  }                                      
+}                                                                                                                            
+"ServiceFeatures" : {                 # dictionary
+  "id"                                : "21.T11148/dfa8a42e6041fdf25a9d"
+  "content":
+  {
+   "providesCollectionPids"           : "21.T11148/0aa131a13395660a337d",                                                                                              
+   "collectionPidProviderType"        : "21.T11148/9537e4ffe90f49761a83",                                                                                              
+   "enforcesAccess"                   : "21.T11148/fcfcf6aac968a2ed84d0",                                                                                              
+   "supportsPagination"               : "21.T11148/106b017cc09783d26c4a",                                                                                              
+   "asynchronousActions"              : "21.T11148/0d1d7d4fd99d13f1399d",                                                                                              
+   "ruleBasedGeneration"              : "21.T11148/36f5a2e42cc1f07e1c97",                                                                                              
+   "maxExpansionDepth"                : "21.T11148/f477816b2f5dd4c21fd0",                                                                                              
+   "providesVersioning"               : "21.T11148/b0857cf2c32290238f4a",                                                                                              
+   "supportedCollectionOperations"    : "21.T11148/ffcddb18da563e38f2ba",                                                                                              
+   "supportedModelTypes"              : "21.T11148/ff3e31a0f6593eca24f2"                                                                                               
+  }                                                                                                                                                                   
+}
+"capabilities" : {                    # dictionary
+  "id"                                : "21.T11148/362d2035d5045b3885b6"
+  "content":
+  {
+   "isOrdered"                        : "21.T11148/f73e9e53f28f7a2daa96",                                                                                              
+   "appendsToEnd"                     : "21.T11148/7c73a5ef3ad537f3540a",                                                                                              
+   "maxLength"                        : "21.T11148/80fbf92a544e0b78c3a5",                                                                                              
+   "membershipIsMutable"              : "21.T11148/68f0dc4c89fe708aa946",                                                                                              
+   "metadataIsMutable"                : "21.T11148/8012c128c2bca2e99c29",                                                                                              
+   "restrictedToType"                 : "21.T11148/f786eb287a05ec0f31a7",                                                                                              
+   "supportsRoles"                    : "21.T11148/1cb7c5016257cbada745",                                                                                              
+  }                                                                                                                                                                   
+}
+"properties" : {                      # dictionary
+  "id"                                : "21.T11148/e200c0c8256011f46a25"
+  "content":
+  {
+   "modelType"                        : "21.T11148/2d1e64bc217fce96a569",                                                                                              
+   "descriptionOntology"              : "21.T11148/88356ff4f8d62a1b9fd0",                                                                                              
+   "memberOf"                         : "21.T11148/553ccd655e23ef942e44",                                                                                              
+   "license"                          : "21.T11148/dc54ae4b6807f5887fda",                                                                                              
+   "ownership"                        : "21.T11148/6ac2e9b06358dc21e812",                                                                                              
+   "hasAccessRestrictions"            : "21.T11148/683d2a6545516a65c985"                                                                                               
+  }                                                                                                                                                                   
+}                                   
+
+"membership" :{                       # dictionary
+  "ID"                                : "21.T11148/ec9db37ca4b137579592",
+  "content":
+  {
+   "MemberItemList"                   : "21.T11148/e139307f7a797b6e0f72"
+  }
+} 
+                                                                                                                                  
+"MemberItemList" : {                  # array
+  "ID"                                : "21.T11148/e139307f7a797b6e0f72"
+  "content":
+  {
+   "MemberItem"                       : "21.T11148/195f306b750096f4fb6c"
+  }
+} 
+"MemberItem" : {                      # dictionary
+  "id"                                : "21.T11148/195f306b750096f4fb6c"
+  "content":
+  {
+   "id"                               : "21.T11148/0dd75e3528dd246977ec",                                                                                             
+   "location"                         : "21.T11148/1bba2359c61cfee6948c",                                                                                             
+   "description"                      : "21.T11148/d6532ef6dc2b2a4ea01e",                                                                                             
+   "datatype"                         : "21.T11148/6a3cacc825e61d9e383f",                                                                                             
+   "ontology"                         : "21.T11148/20b84403f089c73e4016",
+   "context"                          : "21.T11148/ec2727b3b71f07635f72",
+   "mappings"                         : "21.T11148/feed63a23d1d6d7e0e08"
+  }
+}  
+"mappings" : {                        # dictionary
+  "id"                                : "21.T11148/feed63a23d1d6d7e0e08"
+  "content":
+  {
+   "role"                             : "21.T11148/31cf58fed6ddd1b96102",
+   "index"                            : "21.T11148/85f498d4e97df8d70dab",
+   "dateAdded"                        : "21.T11148/0ffdf247d605a5b40853",
+   "dateUpdated"                      : "21.T11148/e563e40ec891f2fea158"
+  }
+} 
+
+
