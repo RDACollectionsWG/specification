@@ -326,7 +326,6 @@ There exists already an implementation as a very early prototype based on flask 
   {
    "id"                               : "21.T11148/0dd75e3528dd246977ec",
    "membership"                       : "21.T11148/ec9db37ca4b137579592",
-   "description"                      : "21.T11148/d6532ef6dc2b2a4ea01e",
    "capabilities"                     : "21.T11148/362d2035d5045b3885b6",
    "properties"                       : "21.T11148/e200c0c8256011f46a25"                                                                                              
   }                                      
@@ -370,6 +369,7 @@ There exists already an implementation as a very early prototype based on flask 
    "license"                          : "21.T11148/dc54ae4b6807f5887fda",                                                                                              
    "ownership"                        : "21.T11148/6ac2e9b06358dc21e812",                                                                                              
    "hasAccessRestrictions"            : "21.T11148/683d2a6545516a65c985"                                                                                               
+   "description"                      : "21.T11148/d6532ef6dc2b2a4ea01e",
   }                                                                                                                                                                   
 }                                   
 
