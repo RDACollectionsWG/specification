@@ -107,7 +107,7 @@ A **collection** is a 4-tuple of an identifier, capabilities, collection propert
 **Collection Capabilities** fully comprise the set of actions that are supported by it. Actions may affect collection properties or membership. *Remark*: (1) An external agent may provide more actions than are in a collection's capabilities, e.g. more sophisticated composite actions or actions across multiple collections.  (2) An agent submits a capability request to a collection to retrieve the action set.
 
 **Collection properties** comprise essential metadata regarding the collection, who have a primarily informative purpose, whereas collection capabilities determine the possible actions on a collection.
- * *Examples:* General collection state information such as its creation date, ownership and license, possible relations to other collections, like parent collections, or a pointer to a more sophisticated description ontology.
+ * *Examples:* General collection state information such as its creation date, ownership and license, description, possible relations to other collections, like parent collections, or a pointer to a more sophisticated description ontology.
 
 The **collection membership** is a finite multiset of collection members. Collection membership may either be defined explicitly or implicitly through a generation rule. 
 
