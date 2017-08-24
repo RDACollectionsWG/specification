@@ -167,6 +167,48 @@ As an open platform, we want all data we produce to be easily shared and reused 
 * perform simple CRUD/L operations on collections and items in a collection
 * perform more complex discovery operations on collections based upon the properties of individual collection items, such finding all items across all collections that match or don't match or contain a specific item. 
 
+### 4.3 GEOFON use case: seismological data centre
+
+The German Research Centre for Geosciences (GFZ) provides valuable seismological services in the form of a
+seismological infrastructure named GEOFON to research and better understand our complex system Earth.
+
+GEOFON is not only one of the fastest earthquake information provider worldwide, but also one of the largest nodes of the European Integrated Data Archive (EIDA) for seismological data under the ORFEUS umbrella, which is a distributed data centre
+established to (a) securely archive seismic waveform data and related metadata, gathered by European research infrastructures, and (b) provide transparent access to the archives by the geosciences research communities.
+
+GEOFON has archived seismic waveforms since 1993 and currently archives around 10.000 streams daily from seismic stations
+sending data in real-time from all around the world.
+
+The standard way in which seismological data centres provide data to users is based on specifications provided by
+the International Federation of Digital Seismograph Networks (FDSN). An API is available, which let users define
+the contents of the dataset and create them _on-the-fly_, but the specification does not contemplate the idea of pre-assembled datasets.
+
+Data requests could be clasified in two big groups: the ones related to an earthquake and the ones related to an experiment.
+In general, most of our data requests are related to the time and location of an earthquake. After any big
+earthquake thousands of data requests are received with a considerable overlap of data between them (similar short
+time window and variable set of stations), but quite rarely exactly the same dataset.
+
+But there are also some users who request _all data produced in an experiment_, or _all data recorded by a station_. This results in a big amount of data requested (with long time windows and a fixed set of stations) to be later processed and not particularly related to any earthquake.
+
+Only at GEOFON, we have more than 6 million successful requests/year, which are created dinamically (not predefined).
+It would be impossible for us, mainly due to storage limitations, to replicate a dataset for instance by keeping a copy of each dataset, not allowing the user to reference the dataset for future use (publication, share with someone else). Today, the user can only share the _request definition_, but if there are new data in the requested time window or new streams in the set of stations defined the resulting dataset will be different from the original one. Quite rarely it could also happen
+that some data were deleted.
+
+From the data centre perspective it is also difficult to offer big pre-assembled datasets to be downloaded, due to the
+resources needed for their storage.
+
+In this context, we find very appealing the idea of using a Data Collections System in order to define and track both
+types of data requests. In the case of the big pre-assembled datasests we can define collections containing only
+"pointers" (e.g. PIDs, URLs) to the files which are included. This would imply almost no extra storage, as only the
+pointers are saved. Therefore, we could also expose our archive through the definition of big datasets with a
+marginal increase in the space needed.
+
+In the case of the dynamic datasets we could follow the same approach. Namely, for each request we could define a collection with the PIDs of the files which fall into the range of values defined by the user.
+If new data comes in the future _it will not appear in the collection_, because the content of the dataset will
+not be recreated based on the original query, but on the files which originally formed the dataset.
+
+In both cases, once a collection is created it is possible for the user to reference it for later use (e.g. share it
+with others or use it as supplementary information for publications).
+
 
 ## 5. Additional collection operations
 
