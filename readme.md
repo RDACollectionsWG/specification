@@ -275,9 +275,9 @@ The general concept of collections and the facilities the common API provides ca
 
 ## 12. Appendix
 
-## 12.1 Data Type Registration of Collection Elements
+### 12.1 Data Type Registration of Collection Elements
 
-## 12.1.1 Hierarchical Data Types, Semantics and Disambiguation
+#### 12.1.1 Hierarchical Data Types, Semantics and Disambiguation
 
 The description of dependencies alone, as it was foreseen in the Outcome of the Data Type Registry Working Group of RDA, does not allow a distinction of the way, how dependent types are related to the parent type and to each other for these typical data types as they are described for DTRs in the RDA outcome of the DTR working group. In order to exactly describe types dependent from other types, like those necessary for collections, one needs to implement more structure into the DTR. Data types with this kind of additional information are called hierarchical data types. A special implementation of such hierarchical data types in the ePIC DTR, that refers to JSON schema for the specification of data structure, is described in more detail in [1]. As one additional feature for hierarchical data types one obviously needs some kind of end points without any further reference. These are called basic types in the context of the ePIC DTR (http://dtr.pidconsortium.eu). 
 
@@ -291,7 +291,7 @@ As a consequence for a given hierachical data type the use of human understandab
 
 Which data type is choosen as the referred overall data type, is in general a context dependent granularity decision, as one can see for example in the collection use case as described below.
 
-## 12.1.2 Collection Member Type Description
+#### 12.1.2 Collection Member Type Description
 
 There exists a data type definition called Collection2 that references the five elements identifier, description, properties, capabilities and membership at the ePIC DTR. In order to get a complete type definition for this Collection type, a type definition for each of its five dependencies, their dependencies and dependencies of dependencies ending with basic types as boolean, integer or string is provided. A complete list of the currently defined types in the collection context is given in the subsection about currently registered types below. The current definition of membership in the DTR is compatible, but in fact a bit more complicated, to ensure also the collection registry implementation in a Handle Server, as described in the following subsection.
 
@@ -301,7 +301,7 @@ As an additional data type one always needs the ServiceFeature, which gives info
 
 Other granularities as above are also possible, but they lead in general to less transparency for humans, because the PID references need to be more and more explicit. On the other hand human readability can be achieved by using the machine readable information in the DTR to automatically transform outputs into the named structure by content negotiation. But this requires additional implementation overhead.
 
-## 12.1.3 A Generic Collection Registry Implementation based on Type Values stored in the Collection PID
+#### 12.1.3 A Generic Collection Registry Implementation based on Type Values stored in the Collection PID
 
 Because the Handle System as PID provider allows the storage of additional data type values to a given Handle PID, it is an obvious possibility to implement a collection registry on top of a Handle Service by creating for each new collection a PID and store all of the above described collection elements as types inside this PID.
 
@@ -314,11 +314,12 @@ A disadvantage is the possible overload of the Handle Server. The collection met
 For the membership therefore one could think of a solution by a reference to a digital object in an external repository, which containes then the membership data. This can be determined even at the individual collection level: whether the membership data of a collection is internal or external can be easily distinguished: if it is an array of member items, it would be internal, if it is an identifier string, it would be external. A membership with only one member item is also a list consisting of this only member item. The creation and changement of external membership data needs additional access to that repository of course.
 There exists already an implementation as a very early prototype based on flask for such a generic  collection registry allowing internal or external membership data. 
 
-## 12.1.4 References
+#### 12.1.4 References
 [1] Schwardmann, U.: Automated schema extraction for PID information types, IEEE International Conference on Big Data,  5-8 Dec. 2016, IEEE, DOI:10.1109/BigData.2016.7840957.
 
-## 12.1.5 Overview on Currently Registered Types
+#### 12.1.5 Overview on Currently Registered Types
 
+```
 "Collection" : {                      # dictionary
   "id"                                : "21.T11148/2037de437c80264ccbce"
   "content":
@@ -410,5 +411,5 @@ There exists already an implementation as a very early prototype based on flask 
    "dateUpdated"                      : "21.T11148/e563e40ec891f2fea158"
   }
 } 
-
+```
 
