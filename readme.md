@@ -179,24 +179,20 @@ GEOFON has archived seismic waveforms since 1993 and currently archives around 1
 sending data in real-time from all around the world.
 
 The standard way in which seismological data centres provide data to users is based on specifications provided by
-the International Federation of Digital Seismograph Networks (FDSN). An API is available, which let users define
-the contents of the dataset and create them _on-the-fly_, but the specification does not contemplate the idea of pre-assembled datasets.
+the International Federation of Digital Seismograph Networks (FDSN<sup>http://www.fdsn.org/</sup>). An API is available, which let users define the contents of the dataset and create them _on-the-fly_, but the specification does not contemplate the idea of pre-assembled datasets.
 
-Data requests could be clasified in two big groups: the ones related to an earthquake and the ones related to an experiment.
-In general, most of our data requests are related to the time and location of an earthquake. After any big
-earthquake thousands of data requests are received with a considerable overlap of data between them (similar short
-time window and variable set of stations), but quite rarely exactly the same dataset.
+Data requests could be classified in two big groups: the ones related to an earthquake and the ones related to an experiment.
+In general, most of the data requests are related to the time and location of an earthquake. After any big earthquake thousands of data requests are received with a considerable overlap of data between them (similar short time window and variable set of stations), but quite rarely exactly the same dataset.
 
 But there are also some users who request _all data produced in an experiment_, or _all data recorded by a station_. This results in a big amount of data requested (with long time windows and a fixed set of stations) to be later processed and not particularly related to any earthquake.
 
 Only at GEOFON, we have more than 6 million successful requests/year, which are created dinamically (not predefined).
-It would be impossible for us, mainly due to storage limitations, to replicate a dataset for instance by keeping a copy of each dataset, not allowing the user to reference the dataset for future use (publication, share with someone else). Today, the user can only share the _request definition_, but if there are new data in the requested time window or new streams in the set of stations defined the resulting dataset will be different from the original one. Quite rarely it could also happen
-that some data were deleted.
+It would be impossible for us, mainly due to storage limitations, to replicate the requested datasets by keeping a copy of each dataset. Therefore, there is no way for a user to reference the dataset for future use (publication, share with someone else). Today, the user can only share the _request definition_, but if there are new data in the requested time window or new streams in the set of stations defined the resulting dataset will be different from the original one. Quite rarely it could also happen that some data were deleted.
 
 From the data centre perspective it is also difficult to offer big pre-assembled datasets to be downloaded, due to the
 resources needed for their storage.
 
-In this context, we find very appealing the idea of using a Data Collections System in order to define and track both
+In this context, we find very appealing the idea of using a Data Collections System in order to define and save both
 types of data requests. In the case of the big pre-assembled datasests we can define collections containing only
 "pointers" (e.g. PIDs, URLs) to the files which are included. This would imply almost no extra storage, as only the
 pointers are saved. Therefore, we could also expose our archive through the definition of big datasets with a
@@ -264,6 +260,14 @@ Future enhancements would be to extend the use of the Collections API through th
 
 
 ### GEOFON Project
+
+GEOFON has worked on an implementation of this specification since its early stages in order to manage the definition and storage of pre-assembled datasets, to register the user requests, and to offer the capability of downloading these datasets.
+
+We have even extended the specification with methods to download members of the collection and also the collection as a whole. The latter can be done either by concatenating the members of the collection, what is very useful in the case of the file format used for seismic waveforms, or by downloading a zip file with all its members.
+
+The only methods which have not been implemented are the operations on the collections (/collections/{id}/ops/) and the ones to add and remove the properties of members.
+
+This implementation is being used internally at GEOFON (in beta stage) with more than 6000 collections and 1.5 million members. 
 
 ### Fedora
 
