@@ -254,13 +254,13 @@ The Perseids Manifold implementation <sup>(https://github.com/RDACollectionsWG/p
 
 Reptor is a PHP application which turns a webserver into a data repository. It demonstrates the functionality of a modern data repository along the recommendations of the Research Data Alliance (RDA).
 
-Beside other features, it contains an implementation of the RDA Collection API. A collection is represented by any kind of items (links, strings, numbers, PIDs, ....) in a file with a defined name in a folder. The path to the folder represents the name of the collection. Collections can be managed by an user friendly web interface or via RESTstyle calls on the commandline or any programming language.
+Beside other features, it contains an implementation of the RDA Collection API. A collection is represented by any kind of items (links, strings, numbers, PIDs, ....) in a file with a defined name in a folder. The path to the folder represents the name of the collection. Collections can be managed in an user friendly web interface or via RESTstyle calls on the commandline or any programming language.
 
 For example, the following RESTstyle call to Reptors collection API will list all existing collections in the current Reptor instance:
 
 curl -X GET http://example.com/collections/api.php/collections
 
-Reptor is free software under the Apache license and can be downloaded together with documentation from [http://reptor.thomas-zastrow.de](http://reptor.thomas-zastrow.de). Testinstances are available.
+Reptor is free software under the Apache license and can be downloaded from [http://reptor.thomas-zastrow.de](http://reptor.thomas-zastrow.de).
 
 
 
