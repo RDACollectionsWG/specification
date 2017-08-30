@@ -29,7 +29,7 @@ But despite the differences between abstract data types and research data manage
 
 While there are manifold usage scenarios for collections, several fundamental requirements exist to which the API specification with its CRUD operations also adheres to. The following list of requirements therefore applies to collections across implementations and disciplines. These requirements were assembled from a survey done prior to establishment of the WG and ongoing discussions throughout its lifetime.
 
- 1. Collections must bear globally registered persistent identifiers (PIDs).
+ 1. Collections should bear globally registered persistent identifiers (PIDs). The API specification relies on identifiers being present without prescribing a specific system or approach, however.
  2. Objects in a collection must bear unique identifiers. These can be PIDs, but also identifiers unique within a specific system’s context as long as they remain valid references throughout changes in object location within the system.
  3. Minimal state information on objects must remain retrievable using the identifier beyond the object’s lifetime.
  4. No assumption should be made on the lifetime of collections. Collections may be deleted at any time or kept over long time spans, depending on use case.
@@ -127,83 +127,11 @@ The **collection metadata** comprises the collection properties, all member mapp
 
 ## 4. Use Cases
 
-### 4.1 DKRZ use case: Climate data management
+Throughout the life of the RDA Working Group, use cases from multiple disciplines were discussed and analyzed for their potential of applying the common Collections API and relevant requirements. Out of the many use cases that were part of the group, the following three use cases are described in more detail in the appendix: 
 
-Scientific groups and research institutions around the globe develop individual climate models, which are run on their respective HPC systems. However, there is no perfect climate model, and all of them model the physical world in different ways. To assess the quality of climate models, a large exercise is therefore needed: Running the various models with same input and boundary conditions, producing data that can then be analyzed and compared to assess the differences between models or to generate aggregated “ensemble” data products (basic statistics). This exercise is called the Coupled Model Intercomparison Project (CMIP<sup>https://www.wcrp-climate.org/wgcm-cmip</sup>). 
-
-CMIP is in essence a cyclic activity, with each phase running for several years. The previous phase, now finished, was CMIP5; the current phase is called CMIP6. The insights resulting from CMIP data are eventually also used to back the Assessment Reports of the Intergovernmental Panel on Climate Change (IPCC), and therefore, the community workflow of CMIP is also intertwined to some extent with IPCC processes.
-
-#### 4.1.1 ESGF data collection perspectives
-
-Throughout its phases, CMIP data have grown rapidly in volume, exceeding the capabilities of a single institution to handle data collection and distribution. The global Earth System Grid Federation (ESGF<sup>https://esgf.llnl.gov</sup>) has been set up to as a data infrastructure to support CMIP data management, and DKRZ contributes to its development in multiple areas. 
-
-CMIP6 data are at the most basic level netCDF data files, with each individual file containing a single data variable of a single simulation over the simulation's time range and covering the whole globe. Each file also bears an individual PID. These files are then combined into datasets, which consequently represent all data (all variables) from a single simulation.
-
-The already existing solution for aggregating files into datasets (and assigning a PID to these aggregates) can be extended to become conformant with the Collections API to enable standardized read access from third parties. Moreover, this could also stretch to cover an existing pilot implementation that enables end-users to bundle individual collections of datasets and get a referenceable PID for these bundles. 
-
-#### 4.1.2 Climate data processing collection use case
-
-An implementation scenario that is a continuation along a typical user workflow is the use of collections to aggregate data processing outputs. Some users will need to further process CMIP output, for example, to produce specific data subsets or to extract meaningful indices across multiple datasets. The required processing tools exist, for example COWS based on PyWPS<sup>http://cows.badc.rl.ac.uk/</sup>, the Birdhouse processing framework<sup>http://bird-house.github.io/</sup> developed at DKRZ, the Ophidia framework<sup>http://ophidia.cmcc.it/</sup> or the climate4impact.eu<sup>http://www.climate4impact.eu</sup> portal. It is planned that these tools are extended and improved to become common server-side services as part of future projects. 
-
-Processing service output may be quite varied, but in case it does not consist of atomic output, the use of persistently identified collections will enable users to easily refer to the output of a processing call and possibly submit it as a whole to collection-aware data sharing services. Moreover, if processing input data are already bundled with collections, e.g. if it is part of CMIP6, the basic provenance relationship between the collections may be recorded through dedicated metadata.
-
-### 4.2 Perseids Project
-
-The Perseids Project <sup>(http://perseids.org)</sup> provides a platform for creating, publishing, and sharing research data, in the form of textual transcriptions, annotations and analyses.  The platform itself uses a collection-centric data model, where each dataset produced on the platform is treated as a vertical collection of heterogeneous data objects. In addition, each item in a dataset can be thought of as belonging to one or more other global collections of data objects, grouped by data type, primary topic, community, or other criteria. 
-
-For example, User A, a member of Community B, creates a dataset that include a data object which is treebank (<sup>https://en.wikipedia.org/wiki/Treebank</sup>) of a set of passages from a canonically identified text, Homer's Iliad Book 1, lines 1-10.  Community B has editorial process which enables annotations from members of the community to pass through a peer review process before publication. This data object might belong to:
-
-* the collection of all Ancient Greek treebank data
-* the collection of all annotations about Homer's Iliad
-* the collection of all annotations about Book 1 Lines 1 through 10 of Homer's Iliad
-* the collection of all data created by User A
-* the collection of all data approved by the Community B editorial board
-
-As an open platform, we want all data we produce to be easily shared and reused by the larger community, at all stages of the publication lifecycle.  Our requirements call for each data object, as well as the collections themselves, to be able to be persistently identified, versioned, carry fine-grained provenance metadata and be validated against a profile, schema or other verifiable criteria. To facilitiate reuse, we must be able to:
-
-* describe collection items as machine-actionable data types, independent of their identifier schemes, and the properties of the collection to which they belong.
-* create reusable templates of collection types with standard descriptive properties and capabilities
-* express relationships between collections, items within a collection, and items across collections using one or more standard ontologies
-* perform simple CRUD/L operations on collections and items in a collection
-* perform more complex discovery operations on collections based upon the properties of individual collection items, such finding all items across all collections that match or don't match or contain a specific item. 
-
-### 4.3 GEOFON use case: seismological data centre
-
-The German Research Centre for Geosciences (GFZ) provides valuable seismological services in the form of a
-seismological infrastructure named GEOFON to research and better understand our complex system Earth.
-
-GEOFON is not only one of the fastest earthquake information provider worldwide, but also one of the largest nodes of the European Integrated Data Archive (EIDA) for seismological data under the ORFEUS umbrella, which is a distributed data centre
-established to (a) securely archive seismic waveform data and related metadata, gathered by European research infrastructures, and (b) provide transparent access to the archives by the geosciences research communities.
-
-GEOFON has archived seismic waveforms since 1993 and currently archives around 10.000 streams daily from seismic stations
-sending data in real-time from all around the world.
-
-The standard way in which seismological data centres provide data to users is based on specifications provided by
-the International Federation of Digital Seismograph Networks (FDSN<sup>http://www.fdsn.org/</sup>). An API is available, which let users define the contents of the dataset and create them _on-the-fly_, but the specification does not contemplate the idea of pre-assembled datasets.
-
-Data requests could be classified in two big groups: the ones related to an earthquake and the ones related to an experiment.
-In general, most of the data requests are related to the time and location of an earthquake. After any big earthquake thousands of data requests are received with a considerable overlap of data between them (similar short time window and variable set of stations), but quite rarely exactly the same dataset.
-
-But there are also some users who request _all data produced in an experiment_, or _all data recorded by a station_. This results in a big amount of data requested (with long time windows and a fixed set of stations) to be later processed and not particularly related to any earthquake.
-
-Only at GEOFON, we have more than 6 million successful requests/year, which are created dinamically (not predefined).
-It would be impossible for us, mainly due to storage limitations, to replicate the requested datasets by keeping a copy of each dataset. Therefore, there is no way for a user to reference the dataset for future use (publication, share with someone else). Today, the user can only share the _request definition_, but if there are new data in the requested time window or new streams in the set of stations defined the resulting dataset will be different from the original one. Quite rarely it could also happen that some data were deleted.
-
-From the data centre perspective it is also difficult to offer big pre-assembled datasets to be downloaded, due to the
-resources needed for their storage.
-
-In this context, we find very appealing the idea of using a Data Collections System in order to define and save both
-types of data requests. In the case of the big pre-assembled datasests we can define collections containing only
-"pointers" (e.g. PIDs, URLs) to the files which are included. This would imply almost no extra storage, as only the
-pointers are saved. Therefore, we could also expose our archive through the definition of big datasets with a
-marginal increase in the space needed.
-
-In the case of the dynamic datasets we could follow the same approach. Namely, for each request we could define a collection with the PIDs of the files which fall into the range of values defined by the user.
-If new data comes in the future _it will not appear in the collection_, because the content of the dataset will
-not be recreated based on the original query, but on the files which originally formed the dataset.
-
-In both cases, once a collection is created it is possible for the user to reference it for later use (e.g. share it
-with others or use it as supplementary information for publications).
+* Perseids data management, where collections are a key part of the data model and a systematic application of the specification enables transparent workflows and efficient management across the publication lifecycle
+* GEOFON seismological data management, where the use of collections can address storage and reproducibility issues posed by complex data requests
+* DKRZ climate data management, where collections give a unified structure to aggregated data products and can help with reproducibility and provenance concerns as part of data processing workflows 
 
 
 ## 5. Additional collection operations
@@ -250,7 +178,7 @@ The API should enable advanced functionality (e.g. search), to be built by consu
 
 The Perseids Manifold implementation <sup>(https://github.com/RDACollectionsWG/perseids-manifold)</sup> of the Collections API is included in the RPID Test Bed <sup>(https://rpidproject.github.io/rpid)</sup>. The RPID testbed is intended to stimulate and enable evaluation of the complementary outputs of RDA in PID oriented data management. The testbed includes a Handle Service, a Data Type Registry, a PIT API, along with the Collections API, and is available for research, education, non-profit, or pre-competitive use through 2019.
 
-### The Reptor Software
+### 10.2 The Reptor Software
 
 Reptor is a PHP application which turns a webserver into a data repository. It demonstrates the functionality of a modern data repository along the recommendations of the Research Data Alliance (RDA).
 
@@ -260,12 +188,9 @@ For example, the following RESTstyle call to Reptors collection API will list al
 
 curl -X GET http://example.com/collections/api.php/collections
 
-Reptor is free software under the Apache license and can be downloaded together with documentation from [http://reptor.thomas-zastrow.de](http://reptor.thomas-zastrow.de). Testinstances are available.
+Reptor is free software under the Apache license and can be downloaded together with documentation from [http://reptor.thomas-zastrow.de](http://reptor.thomas-zastrow.de). Test instances are available.
 
-
-
-
-### Perseids Project
+### 10.3 Perseids Project
 
 The Perseids Project currently uses the Perseids Manifold implementation of the Collections API to manage its collections of annotations.  When an annotation data object is created on Perseids, it gets added to: (1) the collection of all annotations created by the that user; (2) a collection representing the specific publication to which the annotation data object belongs; and (3) if the annotation identifies a canoncial text source via a CTS URN <sup>(http://cite-architecture.github.io/ctsurn/overview/)</sup> as its primary topic of interest, the data object gets added to one or more collections of annotations about that topic depending upon the granularity of the CTS URN identifier. 
 
@@ -274,7 +199,7 @@ Future enhancements would be to extend the use of the Collections API through th
 ![Perseids Data Collection Lifecyle](perseidsdatacollectionlifecycle.png)
 
 
-### GEOFON Project
+### 10.4 GEOFON Project
 
 GEOFON has worked on an implementation of this specification since its early stages in order to manage the definition and storage of pre-assembled datasets, to register the user requests, and to offer the capability of downloading these datasets.
 
@@ -284,7 +209,7 @@ The only methods which have not been implemented are the operations on the colle
 
 This implementation is being used internally at GEOFON (in beta stage) with more than 6000 collections and 1.5 million members. 
 
-### Fedora
+### 10.5 Fedora
 
 The working group chairs initiated discussions with the Fedora Repository (http://fedorarepository.org/) development team to explore the feasibility of adding support for the Collections API to Fedora.  We believe that in order to achieve our goals of enabling widespread data sharing, RDA outputs like the Collections API must be implemented by the infrastructures researchers are already using for managing their data and collections.  Repositories like Fedora are an obvious candidate for this. The the work the API-X community (https://wiki.duraspace.org/display/FF/Design+-+API+Extension+Architecture) has done to implement an API Framework for adding services to Fedora should provide the hooks needed to fairly easily implement the RDA Collections API as an added-value service. Further, the Perseids Manifold implementation has already confirmed that it is possible to use the API to manage collections of data which are expressed according to the Linked Data Protocol model used by Fedora. We have issued a call to both the RDA Collections Working Group and the Fedora Community development community to identify stakeholders for this effort <sup>(https://groups.google.com/forum/#!topic/fedora-community/FFFGrjq54x0)</sup>.
 
@@ -292,11 +217,94 @@ The working group chairs initiated discussions with the Fedora Repository (http:
 
 The general concept of collections and the facilities the common API provides can also be a point for interfacing and integration with Linked Data and ontology usage in general. In line with considerations by the RDA Data Fabric IG, the foundation for research data management is seen at the level of digital objects, with enabling technologies such as persistent identifiers and type registries. Collections provide a layer on top of these, and they express some essential relations between individual objects. The Collection API also offers some anchor points to extent this notion of inter-object relations further. These relations should be integrated into a further Linked Data layer, and certainly enriched with more relations that go beyond the collection scope to provide an encompassing, seamless metadata view. An underpinning of formally encoded ontologies can then provide the semantic dimension needed for agents to make autonomous decisions based on both Collection API actions and Linked Data.  
 
-## 12. Appendix
 
-### 12.1 Data Type Registration of Collection Elements
+## Appendix A: Detailed collection use case descriptions
 
-#### 12.1.1 Hierarchical Data Types, Semantics and Disambiguation
+### A.1 Perseids Project
+
+The Perseids Project <sup>(http://perseids.org)</sup> provides a platform for creating, publishing, and sharing research data, in the form of textual transcriptions, annotations and analyses.  The platform itself uses a collection-centric data model, where each dataset produced on the platform is treated as a vertical collection of heterogeneous data objects. In addition, each item in a dataset can be thought of as belonging to one or more other global collections of data objects, grouped by data type, primary topic, community, or other criteria. 
+
+For example, User A, a member of Community B, creates a dataset that include a data object which is treebank (<sup>https://en.wikipedia.org/wiki/Treebank</sup>) of a set of passages from a canonically identified text, Homer's Iliad Book 1, lines 1-10.  Community B has editorial process which enables annotations from members of the community to pass through a peer review process before publication. This data object might belong to:
+
+* the collection of all Ancient Greek treebank data
+* the collection of all annotations about Homer's Iliad
+* the collection of all annotations about Book 1 Lines 1 through 10 of Homer's Iliad
+* the collection of all data created by User A
+* the collection of all data approved by the Community B editorial board
+
+As an open platform, we want all data we produce to be easily shared and reused by the larger community, at all stages of the publication lifecycle.  Our requirements call for each data object, as well as the collections themselves, to be able to be persistently identified, versioned, carry fine-grained provenance metadata and be validated against a profile, schema or other verifiable criteria. To facilitiate reuse, we must be able to:
+
+* describe collection items as machine-actionable data types, independent of their identifier schemes, and the properties of the collection to which they belong.
+* create reusable templates of collection types with standard descriptive properties and capabilities
+* express relationships between collections, items within a collection, and items across collections using one or more standard ontologies
+* perform simple CRUD/L operations on collections and items in a collection
+* perform more complex discovery operations on collections based upon the properties of individual collection items, such finding all items across all collections that match or don't match or contain a specific item. 
+
+### A.2 GEOFON use case: seismological data centre
+
+The German Research Centre for Geosciences (GFZ) provides valuable seismological services in the form of a
+seismological infrastructure named GEOFON to research and better understand our complex system Earth.
+
+GEOFON is not only one of the fastest earthquake information provider worldwide, but also one of the largest nodes of the European Integrated Data Archive (EIDA) for seismological data under the ORFEUS umbrella, which is a distributed data centre
+established to (a) securely archive seismic waveform data and related metadata, gathered by European research infrastructures, and (b) provide transparent access to the archives by the geosciences research communities.
+
+GEOFON has archived seismic waveforms since 1993 and currently archives around 10.000 streams daily from seismic stations
+sending data in real-time from all around the world.
+
+The standard way in which seismological data centres provide data to users is based on specifications provided by
+the International Federation of Digital Seismograph Networks (FDSN<sup>http://www.fdsn.org/</sup>). An API is available, which let users define the contents of the dataset and create them _on-the-fly_, but the specification does not contemplate the idea of pre-assembled datasets.
+
+Data requests could be classified in two big groups: the ones related to an earthquake and the ones related to an experiment.
+In general, most of the data requests are related to the time and location of an earthquake. After any big earthquake thousands of data requests are received with a considerable overlap of data between them (similar short time window and variable set of stations), but quite rarely exactly the same dataset.
+
+But there are also some users who request _all data produced in an experiment_, or _all data recorded by a station_. This results in a big amount of data requested (with long time windows and a fixed set of stations) to be later processed and not particularly related to any earthquake.
+
+Only at GEOFON, we have more than 6 million successful requests/year, which are created dinamically (not predefined).
+It would be impossible for us, mainly due to storage limitations, to replicate the requested datasets by keeping a copy of each dataset. Therefore, there is no way for a user to reference the dataset for future use (publication, share with someone else). Today, the user can only share the _request definition_, but if there are new data in the requested time window or new streams in the set of stations defined the resulting dataset will be different from the original one. Quite rarely it could also happen that some data were deleted.
+
+From the data centre perspective it is also difficult to offer big pre-assembled datasets to be downloaded, due to the
+resources needed for their storage.
+
+In this context, we find very appealing the idea of using a Data Collections System in order to define and save both
+types of data requests. In the case of the big pre-assembled datasests we can define collections containing only
+"pointers" (e.g. PIDs, URLs) to the files which are included. This would imply almost no extra storage, as only the
+pointers are saved. Therefore, we could also expose our archive through the definition of big datasets with a
+marginal increase in the space needed.
+
+In the case of the dynamic datasets we could follow the same approach. Namely, for each request we could define a collection with the PIDs of the files which fall into the range of values defined by the user.
+If new data comes in the future _it will not appear in the collection_, because the content of the dataset will
+not be recreated based on the original query, but on the files which originally formed the dataset.
+
+In both cases, once a collection is created it is possible for the user to reference it for later use (e.g. share it
+with others or use it as supplementary information for publications).
+
+### A.3 DKRZ use case: Climate data management
+
+Scientific groups and research institutions around the globe develop individual climate models, which are run on their respective HPC systems. However, there is no perfect climate model, and all of them model the physical world in different ways. To assess the quality of climate models, a large exercise is therefore needed: Running the various models with same input and boundary conditions, producing data that can then be analyzed and compared to assess the differences between models or to generate aggregated “ensemble” data products (basic statistics). This exercise is called the Coupled Model Intercomparison Project (CMIP<sup>https://www.wcrp-climate.org/wgcm-cmip</sup>). 
+
+CMIP is in essence a cyclic activity, with each phase running for several years. The previous phase, now finished, was CMIP5; the current phase is called CMIP6. The insights resulting from CMIP data are eventually also used to back the Assessment Reports of the Intergovernmental Panel on Climate Change (IPCC), and therefore, the community workflow of CMIP is also intertwined to some extent with IPCC processes.
+
+#### A.3.1 ESGF data collection perspectives
+
+Throughout its phases, CMIP data have grown rapidly in volume, exceeding the capabilities of a single institution to handle data collection and distribution. The global Earth System Grid Federation (ESGF<sup>https://esgf.llnl.gov</sup>) has been set up to as a data infrastructure to support CMIP data management, and DKRZ contributes to its development in multiple areas. 
+
+CMIP6 data are at the most basic level netCDF data files, with each individual file containing a single data variable of a single simulation over the simulation's time range and covering the whole globe. Each file also bears an individual PID. These files are then combined into datasets, which consequently represent all data (all variables) from a single simulation.
+
+The already existing solution for aggregating files into datasets (and assigning a PID to these aggregates) can be extended to become conformant with the Collections API to enable standardized read access from third parties. Moreover, this could also stretch to cover an existing pilot implementation that enables end-users to bundle individual collections of datasets and get a referenceable PID for these bundles. 
+
+#### A.3.2 Climate data processing collection use case
+
+An implementation scenario that is a continuation along a typical user workflow is the use of collections to aggregate data processing outputs. Some users will need to further process CMIP output, for example, to produce specific data subsets or to extract meaningful indices across multiple datasets. The required processing tools exist, for example COWS based on PyWPS<sup>http://cows.badc.rl.ac.uk/</sup>, the Birdhouse processing framework<sup>http://bird-house.github.io/</sup> developed at DKRZ, the Ophidia framework<sup>http://ophidia.cmcc.it/</sup> or the climate4impact.eu<sup>http://www.climate4impact.eu</sup> portal. It is planned that these tools are extended and improved to become common server-side services as part of future projects. 
+
+Processing service output may be quite varied, but in case it does not consist of atomic output, the use of persistently identified collections will enable users to easily refer to the output of a processing call and possibly submit it as a whole to collection-aware data sharing services. Moreover, if processing input data are already bundled with collections, e.g. if it is part of CMIP6, the basic provenance relationship between the collections may be recorded through dedicated metadata.
+
+
+
+## Appendix B: Use of Data Typing and the Type Registry
+
+### B.1 Data Type Registration of Collection Elements
+
+#### B.1.1 Hierarchical Data Types, Semantics and Disambiguation
 
 The description of dependencies alone, as it was foreseen in the Outcome of the Data Type Registry Working Group of RDA, does not allow a distinction of the way, how dependent types are related to the parent type and to each other. In order to exactly describe type dependencies from other types, like those necessary for collections, one needs to implement more structure into the DTR. Data types with this kind of additional information are called hierarchical data types. A special implementation of such hierarchical data types in the ePIC DTR, that refers to JSON schema for the specification of data structure, is described in more detail in [1]. As one additional feature for hierarchical data types one obviously needs some kind of type end points without any further reference. These types are called basic types in the context of the ePIC DTR (http://dtr.pidconsortium.eu). 
 
@@ -310,7 +318,7 @@ As a consequence for a given hierachical data type the use of human understandab
 
 Which data type is choosen as the referred overall data type, is in general a context dependent granularity decision, as one can see for example in the collection use case as described below.
 
-#### 12.1.2 Collection Member Type Description
+#### B.1.2 Collection Member Type Description
 
 There exists a data type definition called Collection (http://hdl.handle.net/21.T11148/2037de437c80264ccbce) that references the four elements identifier, properties, capabilities and membership at the ePIC DTR. In order to get a complete type definition for this Collection type, a type definition for each of its four dependencies, their dependencies and dependencies of dependencies ending with basic types as boolean, integer or string is provided. A complete list of the currently defined types in the collection context is given in the subsection about currently registered types below. The current definition of membership in the DTR is compatible, but in fact a bit more complicated, to ensure also the collection registry implementation in a Handle Server, as described in the following subsection.
 
@@ -320,7 +328,7 @@ As an additional data type one always needs the ServiceFeature, which gives info
 
 Other granularities as above are also possible, but they lead in general to less transparency for humans, because the PID references need to be more and more explicit. On the other hand human readability can be achieved by using the machine readable information in the DTR to automatically transform outputs into the named structure by content negotiation. But this requires additional implementation overhead.
 
-#### 12.1.3 A Generic Collection Registry Implementation based on Type Values stored in the Collection PID
+#### B.1.3 A Generic Collection Registry Implementation based on Type Values stored in the Collection PID
 
 Because the Handle System as PID provider allows the storage of additional data type values to a given Handle PID, it is an obvious possibility to implement a collection registry on top of a Handle Service by creating for each new collection a PID and store all of the above described collection elements as types inside this PID.
 
@@ -333,10 +341,10 @@ A disadvantage is the possible overload of the Handle Server. The collection met
 For the membership therefore one could think of a solution by a reference to a digital object in an external repository, which containes then the membership data. This can be determined even at the individual collection level: whether the membership data of a collection is internal or external can be easily distinguished: if it is an array of member items, it would be internal, if it is an identifier string, it would be external. A membership with only one member item is also a list consisting of this only member item. The creation and changement of external membership data needs additional access to that repository of course.
 There exists already an implementation as a very early prototype based on flask for such a generic  collection registry allowing internal or external membership data. 
 
-#### 12.1.4 References
+#### B.1.4 References
 [1] Schwardmann, U.: Automated schema extraction for PID information types, IEEE International Conference on Big Data,  5-8 Dec. 2016, IEEE, PID: http://hdl.handle.net/21.11101/0000-0002-A987-7, DOI: http://hdl.handle.net/10.1109/BigData.2016.7840957.
 
-#### 12.1.5 Overview on Currently Registered Types
+#### B.1.5 Overview on Currently Registered Types
 
 ```
 "Collection" : {                      # dictionary
