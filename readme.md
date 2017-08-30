@@ -29,7 +29,7 @@ But despite the differences between abstract data types and research data manage
 
 While there are manifold usage scenarios for collections, several fundamental requirements exist to which the API specification with its CRUD operations also adheres to. The following list of requirements therefore applies to collections across implementations and disciplines. These requirements were assembled from a survey done prior to establishment of the WG and ongoing discussions throughout its lifetime.
 
- 1. Collections must bear globally registered persistent identifiers (PIDs).
+ 1. Collections should bear globally registered persistent identifiers (PIDs). The API specification relies on identifiers being present without prescribing a specific system or approach, however.
  2. Objects in a collection must bear unique identifiers. These can be PIDs, but also identifiers unique within a specific system’s context as long as they remain valid references throughout changes in object location within the system.
  3. Minimal state information on objects must remain retrievable using the identifier beyond the object’s lifetime.
  4. No assumption should be made on the lifetime of collections. Collections may be deleted at any time or kept over long time spans, depending on use case.
