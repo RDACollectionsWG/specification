@@ -1668,6 +1668,21 @@ The JSON format of the full 1.0.0 version of the specification is also provided 
 
 The Perseids Manifold implementation <sup>(https://github.com/RDACollectionsWG/perseids-manifold)</sup> of the Collections API is included in the RPID Test Bed <sup>(https://rpidproject.github.io/rpid)</sup>. The RPID testbed is intended to stimulate and enable evaluation of the complementary outputs of RDA in PID oriented data management. The testbed includes a Handle Service, a Data Type Registry, a PIT API, along with the Collections API, and is available for research, education, non-profit, or pre-competitive use through 2019.
 
+### The Reptor Software
+
+Reptor is a PHP application which turns a webserver into a data repository. It demonstrates the functionality of a modern data repository along the recommendations of the Research Data Alliance (RDA).
+
+Beside other features, it contains an implementation of the RDA Collection API. A collection is represented by any kind of items (links, strings, numbers, PIDs, ....) in a file with a defined name in a folder. The path to the folder represents the name of the collection. Collections can be managed by an user friendly web interface or via RESTstyle calls on the commandline or any programming language.
+
+For example, the following RESTstyle call to Reptors collection API will list all existing collections in the current Reptor instance:
+
+curl -X GET http://example.com/collections/api.php/collections
+
+Reptor is free software under the Apache license and can be downloaded together with documentation from [http://reptor.thomas-zastrow.de](http://reptor.thomas-zastrow.de). Testinstances are available.
+
+
+
+
 ### Perseids Project
 
 The Perseids Project currently uses the Perseids Manifold implementation of the Collections API to manage its collections of annotations.  When an annotation data object is created on Perseids, it gets added to: (1) the collection of all annotations created by the that user; (2) a collection representing the specific publication to which the annotation data object belongs; and (3) if the annotation identifies a canoncial text source via a CTS URN <sup>(http://cite-architecture.github.io/ctsurn/overview/)</sup> as its primary topic of interest, the data object gets added to one or more collections of annotations about that topic depending upon the granularity of the CTS URN identifier. 
