@@ -168,7 +168,13 @@ For information on how to implement authentication and authorization solutions, 
 
 We used the OpenAPI 2.0 Specification <sup>(https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md)</sup> (formerly known as Swagger 2.0) to document the Collections API.  Using this standard enables use of a wide range of open source tooling to develop interfaces for, and client and server code that implement, the API.  The opensource Swagger-UI tool is deployed on the GitHub pages for the working group output at [http://rdacollectionswg.github.io/apidocs/#/](http://rdacollectionswg.github.io/apidocs/#/) and presents a user-friendly view of the API.
 
-The YAML formatted version of the full 1.0.0 version of the specification is provided in Appendix C.
+![Features Operations](features.png)
+
+![Collections Operations](collections.png)
+
+![Members Operations](members.png)
+
+The swagger documentation of the complete 1.0.0 version of the specification is provided in Appendix C.
 
 ## 9. Implementation
 
