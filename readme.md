@@ -186,9 +186,9 @@ Perseids Manifold has been implemented in Python using the Flask HTTP Framework.
 
 The Python data models and database interface in particular are shared across implementations and are meant to simplify queries across different database types, thus enabling addition of new database drivers and reuse of drivers for customized front-ends.
 
-The interface has been formulated in terms of the application models for collections and items, filters and cursors. A translation into database specific queries happens inside the individual implementations. It is up to the implementation to either interpret and apply the filters and cursor to query results, or to translate them directly into the respective database query language and run them natively on the database.
+The database interface has been formulated in terms of the application models for collections and items, filters and cursors. A translation into database specific queries happens inside the individual database drivers. It is up to the driver implementation to either interpret and apply the filters and cursor to query results, or to translate them directly into the respective database query language and run them natively on the database.
 
-In the recommended configuration, Manifold uses a triple store with SPARQL endpoint to save collections data.
+In the recommended configuration, Perseids Manifold uses a triple store with SPARQL endpoint to save collections data.
 
 ## 10. Adoption Efforts
 
