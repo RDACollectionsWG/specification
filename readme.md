@@ -120,7 +120,7 @@ A **collection member entry** consists of a member identifier and multiple membe
 The following figure illustrates the overall structure of these various elements.
 
 ![Collection definitions hierarchy](collection-definitions-hierarchy.png)
-Figure 1: The collection definitions hierarchy expresses the general model for a collection.
+__Figure 1: The collection definitions hierarchy expresses the general model for a collection.__
 
 As membership is a multiset, multiple membership of identical items is possible, which can be of practical relevance in ordered collections, for instance. The notion of *mapping* properties originates in the idea that there is an inherent mapping function that points from membership to mapping metadata elements. This function is injective, as multiple items can be related to the same metadata.
 
@@ -170,17 +170,17 @@ For information on how to implement authentication and authorization solutions, 
 We used the OpenAPI 2.0 Specification <sup>(https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md)</sup> (formerly known as Swagger 2.0) to document the Collections API.  Using this standard enables use of a wide range of open source tooling to develop interfaces for, and client and server code that implement, the API.  The opensource Swagger-UI tool is deployed on the GitHub pages for the working group output at [http://rdacollectionswg.github.io/apidocs/#/](http://rdacollectionswg.github.io/apidocs/#/) and presents a user-friendly view of the API.
 
 ![Features Operations](features.png)
-Figure 2: Screenshot of the Swagger UI view of the _features_ operation.
+__Figure 2: Screenshot of the Swagger UI view of the _features_ operation.__
 
 ![Collections Operations](collections.png)
-Figure 3: Screenshot of the Swagger UI view of the collections operations.
+__Figure 3: Screenshot of the Swagger UI view of the collections operations.__
 
 ![Members Operations](members.png)
-Figure 4: Screenshot of the Swagger UI view of the collection members operations.
+__Figure 4: Screenshot of the Swagger UI view of the collection members operations.__
 
 The swagger documentation of the complete 1.0.0 version of the specification is provided in Appendix C.
 
-## 9. Implementations
+## 9. General Purpose Implementations
 
 ### 9.1. Perseids Manifold
 
@@ -194,13 +194,7 @@ The database interface has been formulated in terms of the application models fo
 
 In the recommended configuration, Perseids Manifold uses a triple store with SPARQL endpoint to save collections data.
 
-## 10. Adoption Efforts
-
-### 10.1 RPID Test Bed
-
-The Perseids Manifold implementation <sup>(https://github.com/RDACollectionsWG/perseids-manifold)</sup> of the Collections API is included in the RPID Test Bed <sup>(https://rpidproject.github.io/rpid)</sup>. The RPID testbed is intended to stimulate and enable evaluation of the complementary outputs of RDA in PID oriented data management. The testbed includes a Handle Service, a Data Type Registry, a PIT API, along with the Collections API, and is available for research, education, non-profit, or pre-competitive use through 2019.
-
-### 10.2 The Reptor Software
+### 9.2 The Reptor Software
 
 Reptor is a PHP application which turns a webserver into a data repository. It demonstrates the functionality of a modern data repository along the recommendations of the Research Data Alliance (RDA).
 
@@ -212,18 +206,28 @@ curl -X GET http://example.com/collections/api.php/collections
 
 Reptor is free software under the Apache license and can be downloaded together with documentation from [http://reptor.thomas-zastrow.de](http://reptor.thomas-zastrow.de). Test instances are available.
 
-### 10.3 Perseids Project
+### 9.3 ePIC
 
-The Perseids Project currently uses the Perseids Manifold implementation of the Collections API to manage its collections of annotations.  When an annotation data object is created on Perseids, it gets added to: (1) the collection of all annotations created by the that user; (2) a collection representing the specific publication to which the annotation data object belongs; and (3) if the annotation identifies a canoncial text source via a CTS URN <sup>(http://cite-architecture.github.io/ctsurn/overview/)</sup> as its primary topic of interest, the data object gets added to one or more collections of annotations about that topic depending upon the granularity of the CTS URN identifier. 
+The ePIC Collection Registry Implementation is a Python Flask-based implementation. It uses registered types and allows multiple prefix-based registries. It is backed by the Handle System and the file system. It will be available soon under https://coll-reg.pidconsortium.eu.
+
+## 10. Adoption Efforts
+
+### 10.1 RPID Test Bed
+
+The Perseids Manifold implementation <sup>(https://github.com/RDACollectionsWG/perseids-manifold)</sup> of the Collections API is included in the RPID Test Bed <sup>(https://rpidproject.github.io/rpid)</sup>. The RPID testbed is intended to stimulate and enable evaluation of the complementary outputs of RDA in PID oriented data management. The testbed includes a Handle Service, a Data Type Registry, a PIT API, along with the Collections API, and is available for research, education, non-profit, or pre-competitive use through 2019.
+
+### 10.2 Perseids Project
+
+The Perseids Project (whose use case is described further in Appendix A.1) currently uses the Perseids Manifold implementation of the Collections API to manage its collections of annotations.  When an annotation data object is created on Perseids, it gets added to: (1) the collection of all annotations created by the that user; (2) a collection representing the specific publication to which the annotation data object belongs; and (3) if the annotation identifies a canoncial text source via a CTS URN <sup>(http://cite-architecture.github.io/ctsurn/overview/)</sup> as its primary topic of interest, the data object gets added to one or more collections of annotations about that topic depending upon the granularity of the CTS URN identifier. 
 
 Future enhancements would be to extend the use of the Collections API through the entire lifecycle of the publication, as set forth below:
 
 ![Perseids Data Collection Lifecyle](perseidsdatacollectionlifecycle.png)
+__Figure 5: The Perseids Data Collection Lifecyle__
 
+### 10.3 GEOFON Project
 
-### 10.4 GEOFON Project
-
-GEOFON has worked on an implementation of this specification since its early stages in order to manage the definition and storage of pre-assembled datasets, to register the user requests, and to offer the capability of downloading these datasets.
+GEOFON  (whose use case is described further in Appendix A.2) has worked on an implementation of this specification since its early stages in order to manage the definition and storage of pre-assembled datasets, to register the user requests, and to offer the capability of downloading these datasets.
 
 We have even extended the specification with methods to download members of the collection and also the collection as a whole. The latter can be done either by concatenating the members of the collection, what is very useful in the case of the file format used for seismic waveforms, or by downloading a zip file with all its members.
 
@@ -231,11 +235,12 @@ The only methods which have not been implemented are the operations on the colle
 
 This implementation is being used internally at GEOFON (in beta stage) with more than 6000 collections and 1.5 million members. 
 
+### 10.4 Fedora
 The working group chairs initiated discussions with the Fedora Repository (http://fedorarepository.org/) development team to explore the feasibility of adding support for the Collections API to Fedora.  We believe that in order to achieve our goals of enabling widespread data sharing, RDA outputs like the Collections API must be implemented by the infrastructures researchers are already using for managing their data and collections.  Repositories like Fedora are an obvious candidate for this. The the work the API-X community (https://wiki.duraspace.org/display/FF/Design+-+API+Extension+Architecture) has done to implement an API Framework for adding services to Fedora should provide the hooks needed to fairly easily implement the RDA Collections API as an added-value service. Further, the Perseids Manifold implementation has already confirmed that it is possible to use the API to manage collections of data which are expressed according to the Linked Data Protocol model used by Fedora. We have issued a call to both the RDA Collections Working Group and the Fedora Community development community to identify stakeholders for this effort <sup>(https://groups.google.com/forum/#!topic/fedora-community/FFFGrjq54x0)</sup>.
 
 ## 11. Conclusion and Outlook
 
-The general concept of collections and the facilities the common API provides can also be a point for interfacing and integration with Linked Data and ontology usage in general. In line with considerations by the RDA Data Fabric IG, the foundation for research data management is seen at the level of digital objects, with enabling technologies such as persistent identifiers and type registries. Collections provide a layer on top of these, and they express some essential relations between individual objects. The Collection API also offers some anchor points to extent this notion of inter-object relations further. These relations should be integrated into a further Linked Data layer, and certainly enriched with more relations that go beyond the collection scope to provide an encompassing, seamless metadata view. An underpinning of formally encoded ontologies can then provide the semantic dimension needed for agents to make autonomous decisions based on both Collection API actions and Linked Data.  
+The general concept of collections and the facilities the common API provides can also serve as a point for interfacing and integration with Linked Data and ontology usage in general. In line with considerations by the RDA Data Fabric IG, the foundation for research data management is seen at the level of digital objects, with enabling technologies such as persistent identifiers and type registries. Collections provide a layer on top of these, and they express some essential relations between individual objects. The Collection API also offers some anchor points to extent this notion of inter-object relations further. These relations should be integrated into a further Linked Data layer, and certainly enriched with more relations that go beyond the collection scope to provide an encompassing, seamless metadata view. An underpinning of formally encoded ontologies can then provide the semantic dimension needed for agents to make autonomous decisions based on both Collection API actions and Linked Data.  
 
 
 ## Appendix A: Detailed collection use case descriptions
@@ -252,7 +257,7 @@ For example, User A, a member of Community B, creates a dataset that include a d
 * the collection of all data created by User A
 * the collection of all data approved by the Community B editorial board
 
-As an open platform, we want all data we produce to be easily shared and reused by the larger community, at all stages of the publication lifecycle.  Our requirements call for each data object, as well as the collections themselves, to be able to be persistently identified, versioned, carry fine-grained provenance metadata and be validated against a profile, schema or other verifiable criteria. To facilitiate reuse, we must be able to:
+As an open platform, we want all data we produce to be easily shared and reused by the larger community, at all stages of the publication lifecycle.  Our requirements call for each data object, as well as the collections themselves, to be able to be persistently identified, versioned, carry fine-grained provenance metadata and be validated against a profile, schema or other verifiable criteria. To facilitate reuse, we must be able to:
 
 * describe collection items as machine-actionable data types, independent of their identifier schemes, and the properties of the collection to which they belong.
 * create reusable templates of collection types with standard descriptive properties and capabilities
@@ -300,7 +305,7 @@ with others or use it as supplementary information for publications).
 
 ### A.3 DKRZ use case: Climate data management
 
-Scientific groups and research institutions around the globe develop individual climate models, which are run on their respective HPC systems. However, there is no perfect climate model, and all of them model the physical world in different ways. To assess the quality of climate models, a large exercise is therefore needed: Running the various models with same input and boundary conditions, producing data that can then be analyzed and compared to assess the differences between models or to generate aggregated “ensemble” data products (basic statistics). This exercise is called the Coupled Model Intercomparison Project (CMIP<sup>https://www.wcrp-climate.org/wgcm-cmip</sup>). 
+Scientific groups and research institutions around the globe, including those at the German Climate Computing Center DKRZ, develop individual climate models which are run on their respective HPC systems. However, there is no perfect climate model, and all of them model the physical world in different ways. To assess the quality of climate models, a large exercise is therefore needed: Running the various models with same input and boundary conditions, producing data that can then be analyzed and compared to assess the differences between models or to generate aggregated “ensemble” data products (basic statistics). This exercise is called the Coupled Model Intercomparison Project (CMIP<sup>https://www.wcrp-climate.org/wgcm-cmip</sup>). 
 
 CMIP is in essence a cyclic activity, with each phase running for several years. The previous phase, now finished, was CMIP5; the current phase is called CMIP6. The insights resulting from CMIP data are eventually also used to back the Assessment Reports of the Intergovernmental Panel on Climate Change (IPCC), and therefore, the community workflow of CMIP is also intertwined to some extent with IPCC processes.
 
@@ -334,15 +339,15 @@ An important feature of the description of dependent types is that one can assig
 
 In the context of hierarchical data types this naming becomes even more important, because the names refer inside the DTR to the PIDs of their data types, and because, with some structure, they are hierarchically relying eventually on basic types, these names are, by the dependencies inside a data type, completely defined structures. This has the advantage that for a data type, given by its PID, one can use these possibly ambiguous internal names as references, because they are disambigued by their type PID and their internal dependency structure.
 
-As a consequence for a given hierachical data type the use of human understandable names for substructures still leads to a well defined total structure and this total structure is completely transparent for machine actions by the type PIDs given in the data type as corresponding to these human understandable names. In other words for hierachical data types it is sufficient to refer to the overall data type PID in order to maintain human readable structures. 
+As a consequence for a given hierachical data type the use of human understandable names for substructures still leads to a well-defined total structure and this total structure is completely transparent for machine actions by the type PIDs given in the data type as corresponding to these human understandable names. In other words for hierarchical data types it is sufficient to refer to the overall data type PID in order to maintain human readable structures. 
 
-Which data type is choosen as the referred overall data type, is in general a context dependent granularity decision, as one can see for example in the collection use case as described below.
+Which data type is chosen as the referred overall data type, is in general a context dependent granularity decision, as one can see for example in the collection use case as described below.
 
 #### B.1.2 Collection Member Type Description
 
 There exists a data type definition called Collection (http://hdl.handle.net/21.T11148/2037de437c80264ccbce) that references the four elements identifier, properties, capabilities and membership at the ePIC DTR. In order to get a complete type definition for this Collection type, a type definition for each of its four dependencies, their dependencies and dependencies of dependencies ending with basic types as boolean, integer or string is provided. A complete list of the currently defined types in the collection context is given in the subsection about currently registered types below. The current definition of membership in the DTR is compatible, but in fact a bit more complicated, to ensure also the collection registry implementation in a Handle Server, as described in the following subsection.
 
-In the context of collections the decision about the overall data type reference can give different different granularities. Which data type granularity is used, is essentially a question of what metadata about a collection is stored in which way in a collection registry. One possibility would be to reference to a type named Collection (s.a.) as a data type consisting of the types given for the five names above. Another is to use the five elements identifier, description, properties, capabilities and membership individually as data type references.  Even another could distinguish between the collection content, the membership, from the collection metadata, the identifier, description, properties and capabilities, and uses these two as data type references.
+In the context of collections the decision about the overall data type reference can give different granularities. Which data type granularity is used, is essentially a question of what metadata about a collection is stored in which way in a collection registry. One possibility would be to reference to a type named Collection (s.a.) as a data type consisting of the types given for the five names above. Another is to use the five elements identifier, description, properties, capabilities and membership individually as data type references.  Even another could distinguish between the collection content, the membership, from the collection metadata, the identifier, description, properties and capabilities, and uses these two as data type references.
 
 As an additional data type one always needs the ServiceFeature, which gives information about the collection registry in its whole.
 
@@ -352,13 +357,13 @@ Other granularities as above are also possible, but they lead in general to less
 
 Because the Handle System as PID provider allows the storage of additional data type values to a given Handle PID, it is an obvious possibility to implement a collection registry on top of a Handle Service by creating for each new collection a PID and store all of the above described collection elements as types inside this PID.
 
-Such an approach has a couple of advantages. One needs to get a PID for a collection anyway and the Handle record allows the storage of type values and this is provided by an API, therefore all one needs is at one place. If one prepends the pathes as provided by RDA for the collection API with the prefix of a Handle Service, one gets a generic collection registry implementation, that can be used across different communities and user groups. The only requirement for a user group would be, to have access to a Handle Service. Such a generic implementation also ensures, that the collection data is always based on the data types as already defined in a DTR. And if one has also schemas available at the data type, as with automated schema generation of the ePIC DTR, one is able to control the data provided for creation and modification of the collection and refuse the operation with a qualified error message.  
+Such an approach has a couple of advantages. One needs to get a PID for a collection anyway and the Handle record allows the storage of type values and this is provided by an API, therefore all one needs is at one place. If one prepends the paths as provided by RDA for the collection API with the prefix of a Handle Service, one gets a generic collection registry implementation, that can be used across different communities and user groups. The only requirement for a user group would be, to have access to a Handle Service. Such a generic implementation also ensures that the collection data is always based on the data types as already defined in a DTR. And if one has also schemas available at the data type, as with automated schema generation of the ePIC DTR, one is able to control the data provided for creation and modification of the collection and refuse the operation with a qualified error message.  
 
-The necessity to distinguish between the collection registry authorization and Handle Server authorization vanishes. This can be both an advantage or a disadvantage and depends on the  authorization policies in question.
+The necessity to distinguish between the collection registry authorization and Handle Server authorization vanishes. This can be both an advantage and a disadvantage and depends on the  authorization policies in question.
 
-A disadvantage is the possible overload of the Handle Server. The collection metadata fields are rather restricted in size, and also they should not change too often, because they refer to the whole collection and not to changements in its members. But especially if the membership is huge or changes too often, this traffic can obstruct the Handle Server. 
+A disadvantage is the possible overload of the Handle Server. The collection metadata fields are rather restricted in size, and also they should not change too often, because they refer to the whole collection and not to changes in its members. But especially if the membership is huge or changes too often, this traffic can obstruct the Handle Server. 
 
-For the membership therefore one could think of a solution by a reference to a digital object in an external repository, which containes then the membership data. This can be determined even at the individual collection level: whether the membership data of a collection is internal or external can be easily distinguished: if it is an array of member items, it would be internal, if it is an identifier string, it would be external. A membership with only one member item is also a list consisting of this only member item. The creation and changement of external membership data needs additional access to that repository of course.
+For the membership therefore one could think of a solution by a reference to a digital object in an external repository, which contains then the membership data. This can be determined even at the individual collection level: whether the membership data of a collection is internal or external can be easily distinguished: if it is an array of member items, it would be internal, if it is an identifier string, it would be external. A membership with only one member item is also a list consisting of this only member item. The creation and change of external membership data needs additional access to that repository of course.
 There exists already an implementation as a very early prototype based on flask for such a generic  collection registry allowing internal or external membership data. 
 
 #### B.1.4 References
@@ -460,8 +465,9 @@ There exists already an implementation as a very early prototype based on flask 
 } 
 ```
 
-## Appendix C: Full API Specification
+## Appendix C: Full API Specification 
 
+The API as expressed as a Swagger API (OpenAPI):
 
 ```
 swagger: '2.0'
