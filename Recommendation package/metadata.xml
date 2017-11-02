@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+<dc:title>Recommendation on Research Data Collections</dc:title>
+<dc:creator>Weigel, Tobias</dc:creator>
+<dc:creator>Almas, Bridget</dc:creator>
+<dc:creator>Baumgardt, Frederik</dc:creator>
+<dc:creator>Zastrow, Thomas</dc:creator>
+<dc:creator>Schwardmann, Ulrich</dc:creator>
+<dc:creator>Hellström, Maggie</dc:creator>
+<dc:creator>Quinteros, Javier</dc:creator>
+<dc:creator>Fleischer, Dirk</dc:creator>
+<dc:description>Recent efforts of the Research Data Alliance have established a conceptual model for the management of research data that promotes the use of digital objects, transcending the traditional notion of files and decoupling questions of access and use from location and storage. In this context, the need for building aggregations or collections of such objects has become an essential element. However, contemporary work on object collections focuses on primarily describing such collections through metadata, whereas research data management practice requires not only to describe collections, but to make them actionable by automated processes to be able to cope with ever increasing amounts and volumes of data. To this effect, this recommendation provides a comprehensive model for actionable collections and a technical interface specification to enable client-server interaction. It also reports on first adoption and implementation efforts across communities and institutions and provides perspectives on the use of data types in connection with collection structures, highlighting pathways for possible future work. </dc:description>
+<dc:publisher>Research Data Alliance</dc:publisher>
+<dc:date>2017-10-13</dc:date>
+</metadata>
